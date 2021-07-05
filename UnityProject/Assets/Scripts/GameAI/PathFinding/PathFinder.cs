@@ -287,10 +287,10 @@ namespace GameAI
                 Status = PathFinderStatus.NOT_INITIALIZED;
             }
 
-
             #endregion
         }
 
+        #region AstarPathFinder
         // The AstarPathFinder.
         public class AStarPathFinder<T> : PathFinder<T>
         {
@@ -309,7 +309,9 @@ namespace GameAI
                     // We can actually implement a function to calculate the cost 
                     // between two adjacent cells. 
 
-                    float G = CurrentNode.GCost + NodeTraversalCost(CurrentNode.Location.Value, cell.Value);
+                    float G = CurrentNode.GCost + NodeTraversalCost(
+                        CurrentNode.Location.Value, cell.Value);
+
                     float H = HeuristicCost(cell.Value, Goal.Value);
 
                     // Check if the cell is already there in the open list.
@@ -325,8 +327,8 @@ namespace GameAI
                     }
                     else
                     {
-                        // if the cell exists in the openlist then check if the G cost is less than the 
-                        // one already in the list.
+                        // if the cell exists in the openlist then check if the G cost 
+                        // is less than the one already in the list.
                         float oldG = mOpenList[idOList].GCost;
                         if (G < oldG)
                         {
@@ -339,17 +341,20 @@ namespace GameAI
                 }
             }
         }
+        #endregion
 
-
+        #region DijkstraPathFinder
         public class DijkstraPathFinder<T> : PathFinder<T>
         {
             protected override void AlgorithmSpecificImplementation(Node<T> cell)
             {
                 if (IsInList(mClosedList, cell.Value) == -1)
                 {
-                    float G = CurrentNode.GCost + NodeTraversalCost(CurrentNode.Location.Value, cell.Value);
-                    float H = 0.0f;// HCostFunction(cell, Goal);
+                    float G = CurrentNode.GCost + NodeTraversalCost(
+                        CurrentNode.Location.Value, cell.Value);
+
                     //Dijkstra doesn't include the Heuristic cost
+                    float H = 0.0f;
 
                     // Check if the cell is already there in the open list.
                     int idOList = IsInList(mOpenList, cell.Value);
@@ -378,16 +383,18 @@ namespace GameAI
                 }
             }
         }
+        #endregion
 
+        #region GreedyPathFinder
         public class GreedyPathFinder<T> : PathFinder<T>
         {
             protected override void AlgorithmSpecificImplementation(Node<T> cell)
             {
                 if (IsInList(mClosedList, cell.Value) == -1)
                 {
-                    float G = 0.0f;// CurrentNode.GCost + GCostFunction(CurrentNode.Location, cell);
-                    float H = HeuristicCost(cell.Value, Goal.Value);
                     //Greedy best-first does doesn't include the G cost
+                    float G = 0.0f;
+                    float H = HeuristicCost(cell.Value, Goal.Value);
 
                     // Check if the cell is already there in the open list.
                     int idOList = IsInList(mOpenList, cell.Value);
@@ -416,5 +423,6 @@ namespace GameAI
                 }
             }
         }
+        #endregion
     }
 }
