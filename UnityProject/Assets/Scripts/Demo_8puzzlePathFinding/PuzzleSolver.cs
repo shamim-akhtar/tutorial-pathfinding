@@ -11,26 +11,25 @@ public class PuzzleSolver : MonoBehaviour
     private PuzzleNode mCurrentState;
     private PuzzleNode mGoalState;
 
-    private AStarPathFinder<PuzzleState> mAstarSolver = new AStarPathFinder<PuzzleState>();
+    private AStarPathFinder<PuzzleState> mAstarSolver = 
+        new AStarPathFinder<PuzzleState>();
     private PuzzleMap mPuzzle = new PuzzleMap(3);
 
-    // Start is called before the first frame update
     void Start()
     {
         mCurrentState = new PuzzleNode(mPuzzle, new PuzzleState(3));
         mGoalState = new PuzzleNode(mPuzzle, new PuzzleState(3));
 
-        //mAstarSolver.onChangeCurrentNode = OnChangeCurrentNode;
         mAstarSolver.NodeTraversalCost = PuzzleMap.GetCostBetweenTwoCells;
         mAstarSolver.HeuristicCost = PuzzleMap.GetManhattanCost;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // Solve the puzzle and immediately show
+        // the solution.
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            //mCurrentState.RandomizeSolvable();
             mPuzzleStateViz.SetPuzzleState(mCurrentState.Value);
             mAstarSolver.Initialize(mCurrentState, mGoalState);
 
@@ -51,6 +50,7 @@ public class PuzzleSolver : MonoBehaviour
             }
         }
 
+        // Randomize the puzzle.
         if(Input.GetKeyDown(KeyCode.R))
         {
             Randomize();
@@ -59,20 +59,33 @@ public class PuzzleSolver : MonoBehaviour
 
     IEnumerator Coroutine_Solve()
     {
+        // Keep calling step as long as the pathfinder's status
+        // is RUNNING.
         while (mAstarSolver.Status == PathFinderStatus.RUNNING)
         {
             mAstarSolver.Step();
             yield return null;
         }
+
+        // SUCCESS.
+        // Show the solution in a smooth way.
         if (mAstarSolver.Status == PathFinderStatus.SUCCESS)
         {
             Debug.Log("Found solution. Displaying solution now");
             StartCoroutine(ShowSolution());
         }
+
+        // FAILURE
+        // Failed finding path.
         if (mAstarSolver.Status == PathFinderStatus.FAILURE)
         {
             Debug.Log("Failure");
         }
+    }
+
+    public void Solve()
+    {
+        StartCoroutine(Coroutine_Solve());
     }
 
     IEnumerator Coroutine_Randomize(int depth)
@@ -80,11 +93,13 @@ public class PuzzleSolver : MonoBehaviour
         int i = 0;
         while (i < depth)
         {
-            List<Node<PuzzleState>> neighbours = mPuzzle.GetNeighbours(mCurrentState);
+            List<Node<PuzzleState>> neighbours = 
+                mPuzzle.GetNeighbours(mCurrentState);
 
             // get a random neignbour.
             int rn = Random.Range(0, neighbours.Count);
-            mCurrentState.Value.SwapWithEmpty(neighbours[rn].Value.GetEmptyTileIndex());
+            mCurrentState.Value.SwapWithEmpty(
+                neighbours[rn].Value.GetEmptyTileIndex());
             i++;
             mPuzzleStateViz.SetPuzzleState(mCurrentState.Value);
             yield return null;
@@ -95,16 +110,6 @@ public class PuzzleSolver : MonoBehaviour
     {
         StartCoroutine(Coroutine_Randomize(depth));
     }
-
-    public void Solve()
-    {
-        StartCoroutine(Coroutine_Solve());
-    }
-
-    //void OnChangeCurrentNode(PathFinderNode<PuzzleState> node)
-    //{
-    //    mPuzzleStateViz.SetPuzzleState(node.Location);
-    //}
 
     IEnumerator ShowSolution()
     {
@@ -118,7 +123,8 @@ public class PuzzleSolver : MonoBehaviour
 
         if (reverseSolution.Count > 0)
         {
-            mPuzzleStateViz.SetPuzzleState(reverseSolution[reverseSolution.Count - 1]);
+            mPuzzleStateViz.SetPuzzleState(
+                reverseSolution[reverseSolution.Count - 1]);
 
             if (reverseSolution.Count > 2)
             {

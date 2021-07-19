@@ -5,22 +5,17 @@ using Puzzle;
 
 public class PuzzleState_Viz : MonoBehaviour
 {
+    [Tooltip("Associate the tiles into this array")]
     public GameObject[] mTiles;
+
+    [Tooltip("Associate the location transforms into this array")]
     public Transform[] mTileLocations;
-    // Start is called before the first frame update
+
     void Start()
     {
-        //SetPuzzleState(PuzzleState.RandomSolvablePuzzle(3));
+        // Create a new PuzzleState and set it.
         PuzzleState state = new PuzzleState(3);
-        //state.SwapWithEmpty(7);
-        //state.RandomizeSolvable();
         SetPuzzleState(state);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void SetPuzzleState(PuzzleState state)
@@ -31,13 +26,18 @@ public class PuzzleState_Viz : MonoBehaviour
         }
     }
 
-    public IEnumerator Coroutine_MoveOverSeconds(GameObject objectToMove, Vector3 end, float seconds)
+    public IEnumerator Coroutine_MoveOverSeconds(
+        GameObject objectToMove,
+        Vector3 end, 
+        float seconds)
     {
         float elapsedTime = 0;
         Vector3 startingPos = objectToMove.transform.position;
         while (elapsedTime < seconds)
         {
-            objectToMove.transform.position = Vector3.Lerp(startingPos, end, (elapsedTime / seconds));
+            objectToMove.transform.position = Vector3.Lerp(
+                startingPos, end, 
+                (elapsedTime / seconds));
             elapsedTime += Time.deltaTime;
 
             yield return new WaitForEndOfFrame();
@@ -50,9 +50,10 @@ public class PuzzleState_Viz : MonoBehaviour
     {
         for (int i = 0; i < state.Arr.Length; ++i)
         {
-            StartCoroutine(Coroutine_MoveOverSeconds(mTiles[state.Arr[i]], mTileLocations[i].position, duration));
-            //mTiles[state.Arr[i]].transform.position = mTileLocations[i].position;
-            //yield return null;
+            StartCoroutine(Coroutine_MoveOverSeconds(
+                mTiles[state.Arr[i]], 
+                mTileLocations[i].position, 
+                duration));
         }
     }
 }
