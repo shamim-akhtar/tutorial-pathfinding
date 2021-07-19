@@ -1418,7 +1418,7 @@ GameObject:
   - component: {fileID: 1972347512}
   - component: {fileID: 1972347513}
   m_Layer: 0
-  m_Name: Puzzle_Viz
+  m_Name: PuzzleSolver_Viz
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
