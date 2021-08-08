@@ -256,7 +256,40 @@ public class RectGrid_Viz : MonoBehaviour
       mDestination.position = pos;
 
       // Set the destination to the NPC.
-      mNPCMovement.SetDestination(new Vector2(pos.x, pos.y));
+      mNPCMovement.SetDestination(this, sc.RectGridCell);
     }
+  }
+
+  public RectGridCell GetRectGridCell(int x, int y)
+  {
+    if(x >= 0 && x < mX && y >=0 && y < mY)
+    {
+      return mRectGridCells[x, y];
+    }
+    return null;
+  }
+
+  public static float GetManhattanCost(
+    Vector2Int a, 
+    Vector2Int b)
+  {
+    return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+  }
+
+  public static float GetEuclideanCost(
+    Vector2Int a, 
+    Vector2Int b)
+  {
+    return GetCostBetweenTwoCells(a, b);
+  }
+
+  public static float GetCostBetweenTwoCells(
+    Vector2Int a, 
+    Vector2Int b)
+  {
+    return Mathf.Sqrt(
+            (a.x - b.x) * (a.x - b.x) +
+            (a.y - b.y) * (a.y - b.y)
+        );
   }
 }
