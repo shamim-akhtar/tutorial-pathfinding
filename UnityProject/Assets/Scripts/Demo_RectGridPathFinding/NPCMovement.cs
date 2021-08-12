@@ -50,6 +50,11 @@ public class NPCMovement : MonoBehaviour
 
     if (start == null) return;
 
+    //mPathFinder.onAddToClosedList = map.OnAddToClosedList;
+    //mPathFinder.onAddToOpenList = map.OnAddToOpenList;
+    //mPathFinder.onChangeCurrentNode = map.OnChangeCurrentNode;
+    map.ResetCellColours();
+
     mPathFinder.Initialize(start, destination);
     StartCoroutine(Coroutine_FindPathSteps());
   }

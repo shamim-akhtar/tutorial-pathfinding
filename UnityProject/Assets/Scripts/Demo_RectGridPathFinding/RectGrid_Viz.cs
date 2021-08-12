@@ -27,6 +27,9 @@ public class RectGrid_Viz : MonoBehaviour
 
   public Color COLOR_WALKABLE = new Color(42 / 255.0f, 99 / 255.0f, 164 / 255.0f, 1.0f);
   public Color COLOR_NON_WALKABLE = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+  public Color COLOR_CURRENT_NODE = new Color(0.5f, 0.4f, 0.1f, 1.0f);
+  public Color COLOR_ADD_TO_OPEN_LIST = new Color(0.2f, 0.7f, 0.5f, 1.0f);
+  public Color COLOR_ADD_TO_CLOSED_LIST = new Color(0.5f, 0.5f, 0.5f, 1.0f);
 
   public Transform mDestination;
   public NPCMovement mNPCMovement;
@@ -291,5 +294,50 @@ public class RectGrid_Viz : MonoBehaviour
             (a.x - b.x) * (a.x - b.x) +
             (a.y - b.y) * (a.y - b.y)
         );
+  }
+
+  public void ResetCellColours()
+  {
+    for(int i = 0; i < mX; i++)
+    {
+      for (int j = 0; j < mY; j++)
+      {
+        GameObject obj = mRectGridCellGameObjects[i, j];
+        RectGridCell_Viz sc = obj.GetComponent<RectGridCell_Viz>();
+        if(sc.RectGridCell.IsWalkable)
+        {
+          sc.SetInnerColor(COLOR_WALKABLE);
+        }
+        else
+        {
+          sc.SetInnerColor(COLOR_NON_WALKABLE);
+        }
+      }
+    }
+  }
+
+  public void OnChangeCurrentNode(PathFinder<Vector2Int>.PathFinderNode node)
+  {
+    int x = node.Location.Value.x;
+    int y = node.Location.Value.y;
+    GameObject obj = mRectGridCellGameObjects[x, y];
+    RectGridCell_Viz sc = obj.GetComponent<RectGridCell_Viz>();
+    sc.SetInnerColor(COLOR_CURRENT_NODE);
+  }
+  public void OnAddToOpenList(PathFinder<Vector2Int>.PathFinderNode node)
+  {
+    int x = node.Location.Value.x;
+    int y = node.Location.Value.y;
+    GameObject obj = mRectGridCellGameObjects[x, y];
+    RectGridCell_Viz sc = obj.GetComponent<RectGridCell_Viz>();
+    sc.SetInnerColor(COLOR_ADD_TO_OPEN_LIST);
+  }
+  public void OnAddToClosedList(PathFinder<Vector2Int>.PathFinderNode node)
+  {
+    int x = node.Location.Value.x;
+    int y = node.Location.Value.y;
+    GameObject obj = mRectGridCellGameObjects[x, y];
+    RectGridCell_Viz sc = obj.GetComponent<RectGridCell_Viz>();
+    sc.SetInnerColor(COLOR_ADD_TO_CLOSED_LIST);
   }
 }
