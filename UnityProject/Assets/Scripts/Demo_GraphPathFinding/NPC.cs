@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameAI.PathFinding;
 
-public class Bus : MonoBehaviour
+public class NPC : MonoBehaviour
 {
   public float Speed = 5.0f;
   public Queue<Vector2> mWayPoints = new Queue<Vector2>();

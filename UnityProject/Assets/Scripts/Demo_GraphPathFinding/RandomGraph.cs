@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using GameAI.PathFinding;
 
 public class Stop : System.IEquatable<Stop>
 {
@@ -104,10 +105,15 @@ public class RandomGraph : MonoBehaviour
   GameObject VertexPrefab;
 
   [SerializeField]
-  Transform Npc;
+  NPC Npc;
 
   [SerializeField]
   Transform Destination;
+
+  AStarPathFinder<Stop> mPathFinder = new AStarPathFinder<Stop>();
+
+  Graph<Stop>.Vertex mGoal;
+  Graph<Stop>.Vertex mStart;
 
   Dictionary<string, GameObject> mVerticesMap = new Dictionary<string, GameObject>();
 
@@ -231,10 +237,17 @@ public class RandomGraph : MonoBehaviour
 
     // randomly place our NPC to one of the vertices.
     int randIndex = Random.Range(0, mBusStopGraph.Count);
-    Npc.position = new Vector3(
+    Npc.transform.position = new Vector3(
       mBusStopGraph.Vertices[randIndex].Value.Point.x,
       mBusStopGraph.Vertices[randIndex].Value.Point.y,
       -1.0f);
+
+    mStart = mBusStopGraph.Vertices[randIndex];
+
+    mPathFinder.HeuristicCost = Stop.GetManhattanCost;
+    mPathFinder.NodeTraversalCost = Stop.GetEuclideanCost;
+    mPathFinder.onSuccess = OnPathFound;
+    mPathFinder.onFailure = OnPathNotFound;
   }
 
   void Update()
@@ -263,8 +276,40 @@ public class RandomGraph : MonoBehaviour
       pos.y = sc.Vertex.Value.Point.y;
       Destination.position = pos;
 
-      Bus bus = Npc.GetComponent<Bus>();
-      bus.AddWayPoint(pos.x, pos.y);
+      mGoal = sc.Vertex;
+      mPathFinder.Initialize(mStart, mGoal);
+      StartCoroutine(Coroutine_FindPathSteps());
     }
+  }
+  IEnumerator Coroutine_FindPathSteps()
+  {
+    while (mPathFinder.Status == PathFinderStatus.RUNNING)
+    {
+      mPathFinder.Step();
+      yield return null;
+    }
+  }
+
+  public void OnPathFound()
+  {
+    PathFinder<Stop>.PathFinderNode node = mPathFinder.CurrentNode;
+    List<Stop> reverse_indices = new List<Stop>();
+    while (node != null)
+    {
+      reverse_indices.Add(node.Location.Value);
+      node = node.Parent;
+    }
+    for (int i = reverse_indices.Count - 1; i >= 0; i--)
+    {
+      Npc.AddWayPoint(new Vector2(reverse_indices[i].Point.x, reverse_indices[i].Point.y));
+    }
+
+    // We set the goal to be the start for next pathfinding
+    mStart = mGoal;
+  }
+
+  void OnPathNotFound()
+  {
+    Debug.Log("Cannot find path to destination");
   }
 }

@@ -59,6 +59,7 @@ public class Graph<T>
   public DelegateOnAddEdge mOnAddDirectedEdge;
   #endregion
 
+  #region Constructors
   public Graph() 
     : this(null)
   {
@@ -71,7 +72,9 @@ public class Graph<T>
     else
       this.mVertices = mVertices;
   }
+  #endregion
 
+  #region Add vertex and edge functions
   // Add a vertex to the graph.
   public void AddVertex(Vertex node)
   {
@@ -120,6 +123,7 @@ public class Graph<T>
     AddDirectedEdge(a, b, cost1);
     AddDirectedEdge(b, a, cost2);
   }
+  #endregion
 
   #region Utility functions
 
