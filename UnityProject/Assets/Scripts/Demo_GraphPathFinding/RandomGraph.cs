@@ -100,71 +100,9 @@ public class RandomGraph : MonoBehaviour
   Graph<Stop> mBusStopGraph = new Graph<Stop>();
   private Rect mExtent = new Rect();
 
-  [SerializeField]
-  GameObject VertexPrefab;
+  public GameObject VertexPrefab = null;
 
   Dictionary<string, GameObject> mVerticesMap = new Dictionary<string, GameObject>();
-
-  public void CreateRandomGraph()
-  {
-    int maxVertices = 20;
-
-    // compute the maximum possible number of edges
-    int maxPossibleEdges = maxVertices * (maxVertices - 1);
-
-    // and randomly choose the number of edges less than
-    // or equal to the maximum number of possible edges
-    int maxEdges = 40;// Random.Range(0, maxPossibleEdges+1);
-
-    // Creating an adjacency list
-    // representation for the random graph
-    List<List<int>> adjacencyList = new List<List<int>>(maxVertices);
-    for (int i = 0; i < maxVertices; i++)
-    {
-      adjacencyList.Add(new List<int>());
-    }
-
-    // A for loop to randomly generate edges
-    for (int i = 0; i < maxEdges; i++)
-    {
-      // Randomly select two vertices to
-      // create an edge between them
-      int v = Random.Range(0, maxVertices);
-      int w = Random.Range(0, maxVertices);
-
-      // Check if there is already an edge between v and w
-      if ((v == w) || adjacencyList[v].Contains(w))
-      {
-        // Reduce the value of i
-        // so that again v and w can be chosen
-        // for the same edge count
-        i = i - 1;
-        continue;
-      }
-
-      // Add an edge between them if
-      // not previously created
-      adjacencyList[v].Add(w);
-    }
-
-    // convert the adjacency list to our graph.
-    for(int i = 0; i < maxVertices; ++i)
-    {
-      mBusStopGraph.AddVertex(new Stop("stop_" + i, Random.Range(-100.0f, 100.0f), Random.Range(-100.0f, 100.0f)));
-    }
-
-    for(int i = 0; i < adjacencyList.Count; ++i)
-    {
-      for(int j = 0; j < adjacencyList[i].Count; ++j)
-      {
-        int to = adjacencyList[i][j];
-        mBusStopGraph.AddDirectedEdge(
-          mBusStopGraph.Vertices[i],
-          mBusStopGraph.Vertices[to],
-          Stop.GetCostBetweenTwoCells(mBusStopGraph.Vertices[i].Value, mBusStopGraph.Vertices[to].Value));
-      }
-    }
-  }
 
   public void CalculateExtent()
   {

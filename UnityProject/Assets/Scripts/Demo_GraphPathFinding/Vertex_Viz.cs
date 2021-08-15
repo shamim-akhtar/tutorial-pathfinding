@@ -8,16 +8,6 @@ public class Vertex_Viz : MonoBehaviour
 
   List<GameObject> mLines = new List<GameObject>();
 
-  void Start()
-  {
-
-  }
-
-  void Update()
-  {
-
-  }
-
   private LineRenderer GetOrCreateLine(int index)
   {
     if (index >= mLines.Count)
@@ -28,7 +18,6 @@ public class Vertex_Viz : MonoBehaviour
       obj.transform.position = new Vector3(0.0f, 0.0f, -1.0f);
       LineRenderer lr = obj.AddComponent<LineRenderer>();
 
-      //obj.AddComponent<LineRendererArrow>();
       ConstantScreenLineWidth clw = obj.AddComponent<ConstantScreenLineWidth>();
       mLines.Add(obj);
 
@@ -36,13 +25,11 @@ public class Vertex_Viz : MonoBehaviour
 
       lr.startColor = Color.green;
       lr.endColor = Color.green;
-      //lr.startWidth = 0.2f;
-      //lr.endWidth = 0.2f;
     }
     return mLines[index].GetComponent<LineRenderer>();
   }
 
-  public void SetVertex(Graph<Stop>.Vertex vertex)
+  public void SetVertex_Perc(Graph<Stop>.Vertex vertex)
   {
     mVertex = vertex;
     for(int i = 0; i < mVertex.Neighbours.Count; ++i)
@@ -61,9 +48,6 @@ public class Vertex_Viz : MonoBehaviour
       Vector3 c = a + dir * distance * 0.15f;
       Vector3 d = a + dir * distance * 0.85f;
 
-
-      //Vector3 perp = Vector3.Cross(dir, Vector3.up).normalized;
-
       LineRenderer lr = GetOrCreateLine(i);
 
       float PercentHead = 0.2f;
@@ -80,6 +64,50 @@ public class Vertex_Viz : MonoBehaviour
           , Vector3.Lerp(c, d, 0.999f - PercentHead)
           , Vector3.Lerp(c, d, 1 - PercentHead)
           , d
+        });
+    }
+  }
+
+  public void SetVertex(Graph<Stop>.Vertex vertex)
+  {
+    mVertex = vertex;
+    for (int i = 0; i < mVertex.Neighbours.Count; ++i)
+    {
+      Graph<Stop>.Vertex n = (Graph<Stop>.Vertex)mVertex.Neighbours[i];
+
+      Vector3 a = new Vector3(mVertex.Value.Point.x, mVertex.Value.Point.y, -1.0f);
+      Vector3 b = new Vector3(n.Value.Point.x, n.Value.Point.y, -1.0f);
+
+      // find the direction.
+      Vector3 dir = (b - a);
+      float distance = dir.magnitude;
+      dir.Normalize();
+
+      // instead of percentage use fixed lengths
+      // and arrow heads so that they dont scale.
+      Vector3 c = a + dir * 0.2f;
+      Vector3 d = b - dir * 0.15f;
+      Vector3 e = b - dir * 0.31f;
+      Vector3 f = b - dir * 0.3f;
+
+      float p1 = (e - c).magnitude / (d - c).magnitude;
+      float p2 = (f - c).magnitude / (d - c).magnitude;
+
+      LineRenderer lr = GetOrCreateLine(i);
+
+      lr.widthCurve = new AnimationCurve(
+            new Keyframe(0, 0.1f),
+            new Keyframe(p1, 0.1f), // neck of arrow
+            new Keyframe(p2, 0.5f), // max width of arrow head
+            new Keyframe(1, 0f));   // tip of arrow
+      lr.positionCount = 4;
+      lr.SetPositions(
+        new Vector3[]
+        {
+          c,
+          e,
+          f,
+          d
         });
     }
   }

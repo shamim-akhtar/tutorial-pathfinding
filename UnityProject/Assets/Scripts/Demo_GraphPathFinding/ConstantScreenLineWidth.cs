@@ -5,8 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class ConstantScreenLineWidth : MonoBehaviour
 {
-  public float mOriginalCameraSize = 20.0f;
-  public float mLineWidth = 0.1f;
+  public float mOriginalCameraSize = 10.0f;
 
   LineRenderer mLineRenderer;
   private void Start()
