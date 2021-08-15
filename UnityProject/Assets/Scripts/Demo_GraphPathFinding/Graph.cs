@@ -181,7 +181,7 @@ public class Graph<T>
     }
   }
 
-  public float Count
+  public int Count
   {
     get { return mVertices.Count; }
   }
