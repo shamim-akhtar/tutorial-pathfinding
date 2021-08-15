@@ -100,7 +100,14 @@ public class RandomGraph : MonoBehaviour
   Graph<Stop> mBusStopGraph = new Graph<Stop>();
   private Rect mExtent = new Rect();
 
-  public GameObject VertexPrefab = null;
+  [SerializeField]
+  GameObject VertexPrefab;
+
+  [SerializeField]
+  Transform Npc;
+
+  [SerializeField]
+  Transform Destination;
 
   Dictionary<string, GameObject> mVerticesMap = new Dictionary<string, GameObject>();
 
@@ -221,10 +228,43 @@ public class RandomGraph : MonoBehaviour
     Vector3 center = mExtent.center;
     center.z = -100.0f;
     Camera.main.transform.position = center;
+
+    // randomly place our NPC to one of the vertices.
+    int randIndex = Random.Range(0, mBusStopGraph.Count);
+    Npc.position = new Vector3(
+      mBusStopGraph.Vertices[randIndex].Value.Point.x,
+      mBusStopGraph.Vertices[randIndex].Value.Point.y,
+      -1.0f);
   }
 
   void Update()
   {
+    if (Input.GetMouseButtonDown(1))
+    {
+      RayCastAndSetDestination();
+    }
+  }
 
+  void RayCastAndSetDestination()
+  {
+    Vector2 rayPos = new Vector2(
+        Camera.main.ScreenToWorldPoint(Input.mousePosition).x,
+        Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
+    RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
+
+    if (hit)
+    {
+      GameObject obj = hit.transform.gameObject;
+      Vertex_Viz sc = obj.GetComponent<Vertex_Viz>();
+      if (sc == null) return;
+
+      Vector3 pos = Destination.position;
+      pos.x = sc.Vertex.Value.Point.x;
+      pos.y = sc.Vertex.Value.Point.y;
+      Destination.position = pos;
+
+      Bus bus = Npc.GetComponent<Bus>();
+      bus.AddWayPoint(pos.x, pos.y);
+    }
   }
 }

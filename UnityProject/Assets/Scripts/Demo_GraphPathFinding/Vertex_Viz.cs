@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Vertex_Viz : MonoBehaviour
 {
+  public Graph<Stop>.Vertex Vertex { get { return mVertex; } }
   private Graph<Stop>.Vertex mVertex;
 
   List<GameObject> mLines = new List<GameObject>();
