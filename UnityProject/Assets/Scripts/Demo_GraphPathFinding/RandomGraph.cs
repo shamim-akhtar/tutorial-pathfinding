@@ -192,25 +192,19 @@ public class RandomGraph : MonoBehaviour
   void CreateRandomGraph1()
   {
     Random.InitState(10);
-    //bool[,] flags = new bool[10, 10];
 
     int rows_cols =10;
     for (int i = 0; i < rows_cols; ++i)
     {
       for (int j = 0; j < rows_cols; ++j)
       {
-        //flags[i, j] = false;
         float toss = Random.Range(0.0f, 1.0f);
-        if (toss >= 0.75f)
+        if (toss >= 0.70f)
         {
           mBusStopGraph.AddVertex(new Stop("stop_" + i + "_" + j, i, j));
-          //flags[i, j] = true;
         }
       }
     }
-
-    //mBusStopGraph.AddDirectedEdge(mBusStopGraph.Vertices[0], mBusStopGraph.Vertices[1],
-    //  Stop.GetAngleBetweenTwoCells(mBusStopGraph.Vertices[0].Value, mBusStopGraph.Vertices[1].Value));
 
     // find the cost between all the vertices.
     List<List<float>> distances = new List<List<float>>(mBusStopGraph.Count);
@@ -238,7 +232,7 @@ public class RandomGraph : MonoBehaviour
       List<float> B = sorted.Select(x => x.Key).ToList();
       List<int> idx = sorted.Select(x => x.Value).ToList();
 
-      // connect the nearest 1 to 4 vertices.
+      // connect the nearest 2 to 4 vertices.
       int index = Random.Range(2, 4);
       int id = 0;
 
@@ -246,6 +240,7 @@ public class RandomGraph : MonoBehaviour
 
       for (int j = 1; j < B.Count-1; ++j)
       {
+        // we do not want to add collinear vertices.
         if (!angleFilled.ContainsKey(angles[i][idx[j]]))
         {
           angleFilled[angles[i][idx[j]]] = true;
