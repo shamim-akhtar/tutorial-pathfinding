@@ -74,10 +74,16 @@ public class Vertex_Viz : MonoBehaviour
     mVertex = vertex;
     for (int i = 0; i < mVertex.Neighbours.Count; ++i)
     {
-      Graph<Stop>.Vertex n = (Graph<Stop>.Vertex)mVertex.Neighbours[i];
+      Graph<Stop>.Vertex n = mVertex.Neighbours[i] as Graph<Stop>.Vertex;
 
-      Vector3 a = new Vector3(mVertex.Value.Point.x, mVertex.Value.Point.y, -1.0f);
-      Vector3 b = new Vector3(n.Value.Point.x, n.Value.Point.y, -1.0f);
+      Vector3 a = new Vector3(
+        mVertex.Value.Point.x, 
+        mVertex.Value.Point.y, 
+        -1.0f);
+      Vector3 b = new Vector3(
+        n.Value.Point.x, 
+        n.Value.Point.y, 
+        -1.0f);
 
       // find the direction.
       Vector3 dir = (b - a);
@@ -86,8 +92,8 @@ public class Vertex_Viz : MonoBehaviour
 
       // instead of percentage use fixed lengths
       // and arrow heads so that they dont scale.
-      Vector3 c = a + dir * 0.2f;
-      Vector3 d = b - dir * 0.15f;
+      Vector3 c = a + dir * 0.22f;
+      Vector3 d = b - dir * 0.2f;
       Vector3 e = b - dir * 0.31f;
       Vector3 f = b - dir * 0.3f;
 
@@ -97,9 +103,9 @@ public class Vertex_Viz : MonoBehaviour
       LineRenderer lr = GetOrCreateLine(i);
 
       lr.widthCurve = new AnimationCurve(
-            new Keyframe(0, 0.1f),
-            new Keyframe(p1, 0.1f), // neck of arrow
-            new Keyframe(p2, 0.5f), // max width of arrow head
+            new Keyframe(0, 0.05f),
+            new Keyframe(p1, 0.05f), // neck of arrow
+            new Keyframe(p2, 0.25f), // max width of arrow head
             new Keyframe(1, 0f));   // tip of arrow
       lr.positionCount = 4;
       lr.SetPositions(

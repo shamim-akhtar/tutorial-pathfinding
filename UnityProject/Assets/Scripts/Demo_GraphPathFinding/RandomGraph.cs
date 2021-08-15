@@ -110,12 +110,16 @@ public class RandomGraph : MonoBehaviour
   [SerializeField]
   Transform Destination;
 
-  AStarPathFinder<Stop> mPathFinder = new AStarPathFinder<Stop>();
+  AStarPathFinder<Stop> mPathFinder = 
+    new AStarPathFinder<Stop>();
 
   Graph<Stop>.Vertex mGoal;
   Graph<Stop>.Vertex mStart;
 
-  Dictionary<string, GameObject> mVerticesMap = new Dictionary<string, GameObject>();
+  Dictionary<string, GameObject> mVerticesMap =
+    new Dictionary<string, GameObject>();
+
+  LineRenderer mPathViz;
 
   public void CalculateExtent()
   {
@@ -140,9 +144,9 @@ public class RandomGraph : MonoBehaviour
     mExtent.yMax = maxY;
   }
 
-  void CreateRandomGraph1()
+  void CreateRandomGraph()
   {
-    Random.InitState(10);
+    //Random.InitState(10);
 
     int rows_cols =10;
     for (int i = 0; i < rows_cols; ++i)
@@ -152,14 +156,19 @@ public class RandomGraph : MonoBehaviour
         float toss = Random.Range(0.0f, 1.0f);
         if (toss >= 0.70f)
         {
-          mBusStopGraph.AddVertex(new Stop("stop_" + i + "_" + j, i, j));
+          mBusStopGraph.AddVertex(
+            new Stop("stop_" + i + "_" + j, i, j));
         }
       }
     }
 
     // find the cost between all the vertices.
-    List<List<float>> distances = new List<List<float>>(mBusStopGraph.Count);
-    List<List<float>> angles = new List<List<float>>(mBusStopGraph.Count);
+    List<List<float>> distances = 
+      new List<List<float>>(mBusStopGraph.Count);
+
+    List<List<float>> angles = 
+      new List<List<float>>(mBusStopGraph.Count);
+
     for (int i = 0; i < mBusStopGraph.Count; ++i)
     {
       distances.Add(new List<float>());
@@ -184,10 +193,11 @@ public class RandomGraph : MonoBehaviour
       List<int> idx = sorted.Select(x => x.Value).ToList();
 
       // connect the nearest 2 to 4 vertices.
-      int index = Random.Range(2, 4);
+      int index = Random.Range(2, 6);
       int id = 0;
 
-      Dictionary<float, bool> angleFilled = new Dictionary<float, bool>();
+      Dictionary<float, bool> angleFilled = 
+        new Dictionary<float, bool>();
 
       for (int j = 1; j < B.Count-1; ++j)
       {
@@ -210,7 +220,7 @@ public class RandomGraph : MonoBehaviour
 
   void Start()
   {
-    CreateRandomGraph1();
+    CreateRandomGraph();
 
     for (int i = 0; i < mBusStopGraph.Vertices.Count; ++i)
     {
@@ -220,7 +230,11 @@ public class RandomGraph : MonoBehaviour
       pos.y = mBusStopGraph.Vertices[i].Value.Point.y;
       pos.z = 0.0f;
 
-      GameObject obj = Instantiate(VertexPrefab, pos, Quaternion.identity);
+      GameObject obj = Instantiate(
+        VertexPrefab, 
+        pos, 
+        Quaternion.identity);
+
       obj.name = mBusStopGraph.Vertices[i].Value.Name;
 
       Vertex_Viz vertexViz = obj.AddComponent<Vertex_Viz>();
@@ -248,6 +262,13 @@ public class RandomGraph : MonoBehaviour
     mPathFinder.NodeTraversalCost = Stop.GetEuclideanCost;
     mPathFinder.onSuccess = OnPathFound;
     mPathFinder.onFailure = OnPathNotFound;
+
+    // We create a line renderer to show the path.
+    mPathViz = transform.gameObject.AddComponent<LineRenderer>();
+    mPathViz.startWidth = 0.2f;
+    mPathViz.endWidth = 0.2f;
+    mPathViz.startColor = Color.magenta;
+    mPathViz.endColor = Color.magenta;
   }
 
   void Update()
@@ -263,6 +284,7 @@ public class RandomGraph : MonoBehaviour
     Vector2 rayPos = new Vector2(
         Camera.main.ScreenToWorldPoint(Input.mousePosition).x,
         Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
+
     RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
 
     if (hit)
@@ -281,6 +303,7 @@ public class RandomGraph : MonoBehaviour
       StartCoroutine(Coroutine_FindPathSteps());
     }
   }
+
   IEnumerator Coroutine_FindPathSteps()
   {
     while (mPathFinder.Status == PathFinderStatus.RUNNING)
@@ -292,16 +315,25 @@ public class RandomGraph : MonoBehaviour
 
   public void OnPathFound()
   {
-    PathFinder<Stop>.PathFinderNode node = mPathFinder.CurrentNode;
+    PathFinder<Stop>.PathFinderNode node = 
+      mPathFinder.CurrentNode;
     List<Stop> reverse_indices = new List<Stop>();
+
     while (node != null)
     {
       reverse_indices.Add(node.Location.Value);
       node = node.Parent;
     }
+    mPathViz.positionCount = reverse_indices.Count;
     for (int i = reverse_indices.Count - 1; i >= 0; i--)
     {
-      Npc.AddWayPoint(new Vector2(reverse_indices[i].Point.x, reverse_indices[i].Point.y));
+      Npc.AddWayPoint(new Vector2(
+        reverse_indices[i].Point.x, 
+        reverse_indices[i].Point.y));
+      mPathViz.SetPosition(i, new Vector3(
+        reverse_indices[i].Point.x,
+        reverse_indices[i].Point.y,
+        0.0f));
     }
 
     // We set the goal to be the start for next pathfinding
