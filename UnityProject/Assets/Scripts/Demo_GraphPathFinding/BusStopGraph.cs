@@ -18,10 +18,16 @@ public class BusStopGraph : MonoBehaviour
   [SerializeField]
   Transform Destination;
 
+  // Our generic pathfinder.
+  // I have used here AStarPathFinder. You can also
+  // use the DijkstraPathFinder or the GreedyPathFinder
   AStarPathFinder<BusStop> mPathFinder = 
     new AStarPathFinder<BusStop>();
 
+  // The goal vertex
   Graph<BusStop>.Vertex mGoal;
+
+  // The start vertex.
   Graph<BusStop>.Vertex mStart;
 
   //Dictionary<string, GameObject> mVerticesMap =
@@ -181,7 +187,8 @@ public class BusStopGraph : MonoBehaviour
 
   void Update()
   {
-    if (Input.GetMouseButtonDown(1))
+    if (Input.GetMouseButtonDown(1) ||
+      Input.GetMouseButtonDown(0))
     {
       RayCastAndSetDestination();
     }
@@ -205,6 +212,7 @@ public class BusStopGraph : MonoBehaviour
       pos.x = sc.Vertex.Value.Point.x;
       pos.y = sc.Vertex.Value.Point.y;
       Destination.position = pos;
+      Destination.gameObject.SetActive(true);
 
       mGoal = sc.Vertex;
       mPathFinder.Initialize(mStart, mGoal);
