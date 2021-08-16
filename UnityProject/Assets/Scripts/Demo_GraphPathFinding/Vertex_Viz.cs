@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Vertex_Viz : MonoBehaviour
 {
-  public Graph<Stop>.Vertex Vertex { get { return mVertex; } }
-  private Graph<Stop>.Vertex mVertex;
+  public Graph<BusStop>.Vertex Vertex { get { return mVertex; } }
+  private Graph<BusStop>.Vertex mVertex;
 
   List<GameObject> mLines = new List<GameObject>();
 
@@ -30,12 +30,12 @@ public class Vertex_Viz : MonoBehaviour
     return mLines[index].GetComponent<LineRenderer>();
   }
 
-  public void SetVertex_Perc(Graph<Stop>.Vertex vertex)
+  public void SetVertex_Perc(Graph<BusStop>.Vertex vertex)
   {
     mVertex = vertex;
     for(int i = 0; i < mVertex.Neighbours.Count; ++i)
     {
-      Graph<Stop>.Vertex n = (Graph<Stop>.Vertex)mVertex.Neighbours[i];
+      Graph<BusStop>.Vertex n = (Graph<BusStop>.Vertex)mVertex.Neighbours[i];
 
       Vector3 a = new Vector3(mVertex.Value.Point.x, mVertex.Value.Point.y, -1.0f);
       Vector3 b = new Vector3(n.Value.Point.x, n.Value.Point.y, -1.0f);
@@ -69,12 +69,12 @@ public class Vertex_Viz : MonoBehaviour
     }
   }
 
-  public void SetVertex(Graph<Stop>.Vertex vertex)
+  public void SetVertex(Graph<BusStop>.Vertex vertex)
   {
     mVertex = vertex;
     for (int i = 0; i < mVertex.Neighbours.Count; ++i)
     {
-      Graph<Stop>.Vertex n = mVertex.Neighbours[i] as Graph<Stop>.Vertex;
+      Graph<BusStop>.Vertex n = mVertex.Neighbours[i] as Graph<BusStop>.Vertex;
 
       Vector3 a = new Vector3(
         mVertex.Value.Point.x, 

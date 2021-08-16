@@ -4,101 +4,9 @@ using System.Linq;
 using UnityEngine;
 using GameAI.PathFinding;
 
-public class Stop : System.IEquatable<Stop>
+public class BusStopGraph : MonoBehaviour
 {
-  public string Name { get; set; }
-  public Vector2 Point { get; set; }
-
-  public Stop()
-  {
-  }
-
-  public Stop(string names, Vector2 point)
-  {
-    Name = names;
-    Point = point;
-  }
-
-  public Stop(string name, float x, float y)
-  {
-    Name = name;
-    Point = new Vector2(x, y);
-  }
-
-  public override bool Equals(object obj) =>
-    this.Equals(obj as Stop);
-
-  public bool Equals(Stop p)
-  {
-    if (p is null)
-    {
-      return false;
-    }
-
-    // Optimization for a common success case.
-    if (System.Object.ReferenceEquals(this, p))
-    {
-      return true;
-    }
-
-    // If run-time types are not exactly the same,
-    // return false.
-    if (this.GetType() != p.GetType())
-    {
-      return false;
-    }
-
-    // Return true if the fields match.
-    // Note that the base class is not invoked 
-    // because it is System.Object, which defines 
-    // Equals as reference equality.
-    return (Name == p.Name);
-  }
-
-  public override int GetHashCode() =>
-    (Name, Point).GetHashCode();
-
-  public static float Distance(Stop a, Stop b)
-  {
-    return (a.Point - b.Point).magnitude;
-  }
-
-  public static float GetManhattanCost(
-    Stop a,
-    Stop b)
-  {
-    return Mathf.Abs(a.Point.x - b.Point.x) +
-      Mathf.Abs(a.Point.y - b.Point.y);
-  }
-
-  public static float GetEuclideanCost(
-    Stop a,
-    Stop b)
-  {
-    return GetCostBetweenTwoCells(a, b);
-  }
-
-  public static float GetCostBetweenTwoCells(
-    Stop a,
-    Stop b)
-  {
-    return (a.Point - b.Point).magnitude;
-  }
-
-  public static float GetAngleBetweenTwoCells(
-    Stop a,
-    Stop b)
-  {
-    float delta_x = b.Point.x - a.Point.x;
-    float delta_y = b.Point.y - a.Point.y;
-    float theta_radians = Mathf.Atan2(delta_y, delta_x);
-    return theta_radians;
-  }
-}
-
-public class RandomGraph : MonoBehaviour
-{
-  Graph<Stop> mBusStopGraph = new Graph<Stop>();
+  Graph<BusStop> mBusStopGraph = new Graph<BusStop>();
   private Rect mExtent = new Rect();
 
   [SerializeField]
@@ -110,11 +18,11 @@ public class RandomGraph : MonoBehaviour
   [SerializeField]
   Transform Destination;
 
-  AStarPathFinder<Stop> mPathFinder = 
-    new AStarPathFinder<Stop>();
+  AStarPathFinder<BusStop> mPathFinder = 
+    new AStarPathFinder<BusStop>();
 
-  Graph<Stop>.Vertex mGoal;
-  Graph<Stop>.Vertex mStart;
+  Graph<BusStop>.Vertex mGoal;
+  Graph<BusStop>.Vertex mStart;
 
   Dictionary<string, GameObject> mVerticesMap =
     new Dictionary<string, GameObject>();
@@ -129,7 +37,7 @@ public class RandomGraph : MonoBehaviour
     float maxY = -Mathf.Infinity;
     for (int i = 0; i < mBusStopGraph.Vertices.Count; ++i)
     {
-      Stop d = mBusStopGraph.Vertices[i].Value;
+      BusStop d = mBusStopGraph.Vertices[i].Value;
       Vector2 p = d.Point;
 
       if (minX > p.x) minX = p.x;
@@ -157,7 +65,7 @@ public class RandomGraph : MonoBehaviour
         if (toss >= 0.70f)
         {
           mBusStopGraph.AddVertex(
-            new Stop("stop_" + i + "_" + j, i, j));
+            new BusStop("stop_" + i + "_" + j, i, j));
         }
       }
     }
@@ -175,11 +83,11 @@ public class RandomGraph : MonoBehaviour
       angles.Add(new List<float>());
       for (int j = 0; j < mBusStopGraph.Count; ++j)
       {
-        distances[i].Add(Stop.Distance(
+        distances[i].Add(BusStop.Distance(
           mBusStopGraph.Vertices[i].Value, 
           mBusStopGraph.Vertices[j].Value));
 
-        angles[i].Add(Stop.GetAngleBetweenTwoCells(
+        angles[i].Add(BusStop.GetAngleBetweenTwoStops(
           mBusStopGraph.Vertices[i].Value, 
           mBusStopGraph.Vertices[j].Value));
       }
@@ -258,8 +166,8 @@ public class RandomGraph : MonoBehaviour
 
     mStart = mBusStopGraph.Vertices[randIndex];
 
-    mPathFinder.HeuristicCost = Stop.GetManhattanCost;
-    mPathFinder.NodeTraversalCost = Stop.GetEuclideanCost;
+    mPathFinder.HeuristicCost = BusStop.GetManhattanCost;
+    mPathFinder.NodeTraversalCost = BusStop.GetEuclideanCost;
     mPathFinder.onSuccess = OnPathFound;
     mPathFinder.onFailure = OnPathNotFound;
 
@@ -315,9 +223,9 @@ public class RandomGraph : MonoBehaviour
 
   public void OnPathFound()
   {
-    PathFinder<Stop>.PathFinderNode node = 
+    PathFinder<BusStop>.PathFinderNode node = 
       mPathFinder.CurrentNode;
-    List<Stop> reverse_indices = new List<Stop>();
+    List<BusStop> reverse_indices = new List<BusStop>();
 
     while (node != null)
     {
