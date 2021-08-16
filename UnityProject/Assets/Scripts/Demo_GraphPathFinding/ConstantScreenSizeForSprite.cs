@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class ConstantScreenSizeForSprite : MonoBehaviour
 {
-    public float mOriginalCameraSize = 10.0f;
-    public Vector3 OrigScale = Vector3.one;
+  public float mOriginalCameraSize = 10.0f;
+  public Vector3 OrigScale = Vector3.one;
 
-    void LateUpdate()
+  void LateUpdate()
+  {
+    if (Camera.main.orthographicSize > 0.1f)
     {
-        transform.localScale = Camera.main.orthographicSize / mOriginalCameraSize * OrigScale;
+      transform.localScale = 
+        Camera.main.orthographicSize / 
+        mOriginalCameraSize * OrigScale;
     }
+  }
 }

@@ -24,8 +24,8 @@ public class BusStopGraph : MonoBehaviour
   Graph<BusStop>.Vertex mGoal;
   Graph<BusStop>.Vertex mStart;
 
-  Dictionary<string, GameObject> mVerticesMap =
-    new Dictionary<string, GameObject>();
+  //Dictionary<string, GameObject> mVerticesMap =
+  //  new Dictionary<string, GameObject>();
 
   LineRenderer mPathViz;
 
@@ -148,7 +148,7 @@ public class BusStopGraph : MonoBehaviour
       Vertex_Viz vertexViz = obj.AddComponent<Vertex_Viz>();
       vertexViz.SetVertex(mBusStopGraph.Vertices[i]);
 
-      mVerticesMap[mBusStopGraph.Vertices[i].Value.Name] = obj;
+      //mVerticesMap[mBusStopGraph.Vertices[i].Value.Name] = obj;
     }
 
     CalculateExtent();

@@ -12,9 +12,11 @@ public class ConstantScreenLineWidth : MonoBehaviour
   {
     mLineRenderer = GetComponent<LineRenderer>();
   }
+
   void LateUpdate()
   {
-    float factor = Camera.main.orthographicSize / mOriginalCameraSize;// * mLineWidth;
+    float factor = Camera.main.orthographicSize / mOriginalCameraSize;
+
     LineRenderer lr = mLineRenderer;
     lr.widthMultiplier = factor;
   }

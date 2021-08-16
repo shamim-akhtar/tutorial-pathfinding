@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class Vertex_Viz : MonoBehaviour
 {
-  public Graph<BusStop>.Vertex Vertex { get { return mVertex; } }
+  public Graph<BusStop>.Vertex Vertex
+  {
+    get
+    {
+      return mVertex;
+    }
+  }
   private Graph<BusStop>.Vertex mVertex;
 
   List<GameObject> mLines = new List<GameObject>();
@@ -19,7 +25,8 @@ public class Vertex_Viz : MonoBehaviour
       obj.transform.position = new Vector3(0.0f, 0.0f, -1.0f);
       LineRenderer lr = obj.AddComponent<LineRenderer>();
 
-      ConstantScreenLineWidth clw = obj.AddComponent<ConstantScreenLineWidth>();
+      ConstantScreenLineWidth clw = 
+        obj.AddComponent<ConstantScreenLineWidth>();
       mLines.Add(obj);
 
       lr.material = new Material(Shader.Find("Sprites/Default"));
@@ -74,7 +81,8 @@ public class Vertex_Viz : MonoBehaviour
     mVertex = vertex;
     for (int i = 0; i < mVertex.Neighbours.Count; ++i)
     {
-      Graph<BusStop>.Vertex n = mVertex.Neighbours[i] as Graph<BusStop>.Vertex;
+      Graph<BusStop>.Vertex n = 
+        mVertex.Neighbours[i] as Graph<BusStop>.Vertex;
 
       Vector3 a = new Vector3(
         mVertex.Value.Point.x, 
