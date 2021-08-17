@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using GameAI.PathFinding;
+using UnityEngine.UI;
 
 public class BusStopGraph : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class BusStopGraph : MonoBehaviour
 
   [SerializeField]
   Transform Destination;
+
+  [SerializeField]
+  Text StatusText;
 
   // Our generic pathfinder.
   // I have used here AStarPathFinder. You can also
@@ -231,6 +235,10 @@ public class BusStopGraph : MonoBehaviour
 
   public void OnPathFound()
   {
+    if (StatusText)
+    {
+      StatusText.text = "Path found to destination";
+    }
     PathFinder<BusStop>.PathFinderNode node = 
       mPathFinder.CurrentNode;
     List<BusStop> reverse_indices = new List<BusStop>();
@@ -259,5 +267,9 @@ public class BusStopGraph : MonoBehaviour
   void OnPathNotFound()
   {
     Debug.Log("Cannot find path to destination");
+    if(StatusText)
+    {
+      StatusText.text = "Cannot find path to destination";
+    }
   }
 }
