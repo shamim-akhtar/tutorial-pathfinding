@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameAI.PathFinding;
 
-public class Vertex_Viz : MonoBehaviour
+public class RandomGraphNode_Viz : MonoBehaviour
 {
-  public Graph<BusStop>.Vertex Vertex
+  public Graph<RandomGraph.RandomGraphNode>.Vertex Vertex
   {
     get
     {
       return mVertex;
     }
   }
-  private Graph<BusStop>.Vertex mVertex;
+  private Graph<RandomGraph.RandomGraphNode>.Vertex mVertex;
 
   List<GameObject> mLines = new List<GameObject>();
 
@@ -38,52 +38,13 @@ public class Vertex_Viz : MonoBehaviour
     return mLines[index].GetComponent<LineRenderer>();
   }
 
-  public void SetVertex_Perc(Graph<BusStop>.Vertex vertex)
-  {
-    mVertex = vertex;
-    for(int i = 0; i < mVertex.Neighbours.Count; ++i)
-    {
-      Graph<BusStop>.Vertex n = (Graph<BusStop>.Vertex)mVertex.Neighbours[i];
-
-      Vector3 a = new Vector3(mVertex.Value.Point.x, mVertex.Value.Point.y, -1.0f);
-      Vector3 b = new Vector3(n.Value.Point.x, n.Value.Point.y, -1.0f);
-
-      // find the direction.
-      Vector3 dir = (b - a);
-      float distance = dir.magnitude;
-      dir.Normalize();
-
-      // draw the first 95% of the line in white and then the last 5% in black.
-      Vector3 c = a + dir * distance * 0.15f;
-      Vector3 d = a + dir * distance * 0.85f;
-
-      LineRenderer lr = GetOrCreateLine(i);
-
-      float PercentHead = 0.2f;
-      lr.widthCurve = new AnimationCurve(
-            new Keyframe(0, 0.2f),
-            new Keyframe(0.999f - PercentHead, 0.2f),  // neck of arrow
-            new Keyframe(1 - PercentHead, 1.0f),  // max width of arrow head
-            new Keyframe(1, 0f));  // tip of arrow
-      lr.positionCount = 4;
-      lr.SetPositions(
-        new Vector3[]
-        {
-          c
-          , Vector3.Lerp(c, d, 0.999f - PercentHead)
-          , Vector3.Lerp(c, d, 1 - PercentHead)
-          , d
-        });
-    }
-  }
-
-  public void SetVertex(Graph<BusStop>.Vertex vertex)
+  public void SetVertex(Graph<RandomGraph.RandomGraphNode>.Vertex vertex)
   {
     mVertex = vertex;
     for (int i = 0; i < mVertex.Neighbours.Count; ++i)
     {
-      Graph<BusStop>.Vertex n = 
-        mVertex.Neighbours[i] as Graph<BusStop>.Vertex;
+      Graph<RandomGraph.RandomGraphNode>.Vertex n = 
+        mVertex.Neighbours[i] as Graph<RandomGraph.RandomGraphNode>.Vertex;
 
       Vector3 a = new Vector3(
         mVertex.Value.Point.x, 

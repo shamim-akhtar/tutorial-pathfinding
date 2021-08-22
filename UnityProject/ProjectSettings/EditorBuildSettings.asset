@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Demo_GraphPathFinding.unity
     guid: c83df59d4f1fbc24cafe3fdf271ff28a
+  - enabled: 1
+    path: Assets/Scenes/Demo_ThreadedPathFinding.unity
+    guid: b1180a353e54f564bad0ed15c6edb5f7
   m_configObjects: {}
