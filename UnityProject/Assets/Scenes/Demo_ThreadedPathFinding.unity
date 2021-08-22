@@ -956,12 +956,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VertexPrefab: {fileID: 5360448224127608593, guid: 92641e196c37b354580d7b4fc4fb2038, type: 3}
   NpcPrefab: {fileID: 8572495700374421097, guid: 80fdf5b28b182d24ba825ed3b07e9401, type: 3}
-  NumNPC: 50
+  NumNPC: 100
   Destination: {fileID: 439900538}
   StatusText: {fileID: 276019147}
-  rows_cols: 40
-  rows_rows: 20
-  NodeSelectionProb: 0.6
+  rows_cols: 50
+  rows_rows: 30
+  NodeSelectionProb: 0.5
 --- !u!4 &1680612857
 Transform:
   m_ObjectHideFlags: 0

@@ -7,7 +7,6 @@ using System.Threading;
 
 public class ThreadedPathFinder<T>
 {
-
   PathFinder<T> mPathFinder;
   public PathFinder<T> PathFinder
   {
@@ -20,7 +19,9 @@ public class ThreadedPathFinder<T>
   public int Index { get; private set; }
   public bool Done { get; set; } = false;
 
-  public ThreadedPathFinder(PathFinder<T> pf, int index)
+  public ThreadedPathFinder(
+    PathFinder<T> pf, 
+    int index)
   {
     mPathFinder = pf;
     Index = index;
@@ -28,7 +29,8 @@ public class ThreadedPathFinder<T>
 
   public void Execute()
   {
-    while(mPathFinder.Status == PathFinderStatus.RUNNING)
+    while(mPathFinder.Status == 
+      PathFinderStatus.RUNNING)
     {
       mPathFinder.Step();
     }
@@ -41,7 +43,8 @@ public class ThreadedPathFinderPool<T>
   private List<ThreadedPathFinder<T>> mPathFinders = 
     new List<ThreadedPathFinder<T>>();
 
-  public ThreadedPathFinder<T> CreateThreadedAStarPathFinder()
+  public ThreadedPathFinder<T> 
+    CreateThreadedAStarPathFinder()
   {
     ThreadedPathFinder<T> tpf = 
       new ThreadedPathFinder<T>(
@@ -51,7 +54,8 @@ public class ThreadedPathFinderPool<T>
     return tpf;
   }
 
-  public ThreadedPathFinder<T> GetThreadedPathFinder(int index)
+  public ThreadedPathFinder<T> 
+    GetThreadedPathFinder(int index)
   {
     return mPathFinders[index];
   }
@@ -66,7 +70,7 @@ public class ThreadedPathFinderPool<T>
     Thread thread = new Thread(starter);
     thread.IsBackground = true;
     thread.Start();
-    thread.Join();
+    //thread.Join();
   }
 
   public void FindPath(
@@ -74,7 +78,8 @@ public class ThreadedPathFinderPool<T>
     Node<T> start,
     Node<T> goal)
   {
-    if (index < 0 || index >= mPathFinders.Count) return;
+    if (index < 0 || index >= mPathFinders.Count)
+      return;
     FindPath(mPathFinders[index], start, goal);
   }
 }

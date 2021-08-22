@@ -125,16 +125,9 @@ public class RandomGraph : MonoBehaviour
   [SerializeField]
   Text StatusText;
 
-
   public int rows_cols = 20;
   public int rows_rows = 10;
   public float NodeSelectionProb = 0.6f;
-
-  //// Our generic pathfinder.
-  //// I have used here AStarPathFinder. You can also
-  //// use the DijkstraPathFinder or the GreedyPathFinder
-  //AStarPathFinder<RandomGraphNode> mPathFinder = 
-  //  new AStarPathFinder<RandomGraphNode>();
 
   List<GameObject> mNPCs = new List<GameObject>();
   // The goal vertex
@@ -362,8 +355,6 @@ public class RandomGraph : MonoBehaviour
       Destination.gameObject.SetActive(true);
 
       mGoal = sc.Vertex;
-      //mPathFinder.Initialize(mStart, mGoal);
-      //StartCoroutine(Coroutine_FindPathSteps());
 
       // create threaded pool.
       for(int i = 0; i < mNPCs.Count; ++i)
