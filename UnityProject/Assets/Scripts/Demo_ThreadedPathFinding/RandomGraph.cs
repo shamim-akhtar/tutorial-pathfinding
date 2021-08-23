@@ -286,6 +286,7 @@ public class RandomGraph : MonoBehaviour
   public void RandomizeNPCs()
   {
     mNPCStartPositions.Clear();
+    StatusText.text = "";
     for (int i = 0; i < NumNPC; ++i)
     {
       // randomly place our NPCs
@@ -378,7 +379,7 @@ public class RandomGraph : MonoBehaviour
     ThreadedPathFinder<RandomGraphNode> tpf = mThreadedPool.GetThreadedPathFinder(index);
     if (StatusText)
     {
-      //StatusText.text = "Path found to destination";
+      //StatusText.text += index + " - Found path to destination\n";
     }
     PathFinder<RandomGraphNode>.PathFinderNode node =
       tpf.PathFinder.CurrentNode;
@@ -404,14 +405,15 @@ public class RandomGraph : MonoBehaviour
         reverse_indices[i].Point.y,
         0.0f));
     }
+    mNPCStartPositions[index] = mGoal;
   }
 
   void OnPathNotFound(int i)
   {
-    Debug.Log(i + " - Cannot find path to destination");
+    //Debug.Log(i + " - Cannot find path to destination");
     if(StatusText)
     {
-      //StatusText.text = "Cannot find path to destination";
+      StatusText.text += i + " - Cannot find path to destination\n";
     }
   }
 
