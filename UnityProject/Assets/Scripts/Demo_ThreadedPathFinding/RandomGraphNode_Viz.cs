@@ -5,14 +5,14 @@ using GameAI.PathFinding;
 
 public class RandomGraphNode_Viz : MonoBehaviour
 {
-  public Graph<RandomGraph.RandomGraphNode>.Vertex Vertex
+  public Graph<RandomGraphNode>.Vertex Vertex
   {
     get
     {
       return mVertex;
     }
   }
-  private Graph<RandomGraph.RandomGraphNode>.Vertex mVertex;
+  private Graph<RandomGraphNode>.Vertex mVertex;
 
   List<GameObject> mLines = new List<GameObject>();
 
@@ -38,13 +38,13 @@ public class RandomGraphNode_Viz : MonoBehaviour
     return mLines[index].GetComponent<LineRenderer>();
   }
 
-  public void SetVertex(Graph<RandomGraph.RandomGraphNode>.Vertex vertex)
+  public void SetVertex(Graph<RandomGraphNode>.Vertex vertex)
   {
     mVertex = vertex;
     for (int i = 0; i < mVertex.Neighbours.Count; ++i)
     {
-      Graph<RandomGraph.RandomGraphNode>.Vertex n = 
-        mVertex.Neighbours[i] as Graph<RandomGraph.RandomGraphNode>.Vertex;
+      Graph<RandomGraphNode>.Vertex n = 
+        mVertex.Neighbours[i] as Graph<RandomGraphNode>.Vertex;
 
       Vector3 a = new Vector3(
         mVertex.Value.Point.x, 

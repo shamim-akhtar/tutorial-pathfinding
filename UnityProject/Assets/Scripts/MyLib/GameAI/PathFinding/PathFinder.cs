@@ -5,6 +5,12 @@ namespace GameAI
 {
   namespace PathFinding
   {
+    public enum PathFinderTypes
+    {
+      ASTAR,
+      DJIKSTRA,
+      GREEDY_BEST_FIRST,
+    }
     // An enumeration type to represent the status of the 
     // pathfinder at any given time.
     public enum PathFinderStatus

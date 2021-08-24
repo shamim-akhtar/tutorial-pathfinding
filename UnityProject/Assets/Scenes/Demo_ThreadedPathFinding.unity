@@ -285,7 +285,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1680612856}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RandomGraph, Assembly-CSharp
         m_MethodName: OnClickRandomizeNPCs
         m_Mode: 1
@@ -707,7 +707,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1680612856}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RandomGraph, Assembly-CSharp
         m_MethodName: OnClickRegenerate
         m_Mode: 1
@@ -934,7 +934,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1680612857}
-  - component: {fileID: 1680612856}
+  - component: {fileID: 1680612858}
   m_Layer: 0
   m_Name: RandomGraph
   m_TagString: Untagged
@@ -942,26 +942,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1680612856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1680612855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad705402fea4fcc40ab30548aed43e0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  VertexPrefab: {fileID: 5360448224127608593, guid: 92641e196c37b354580d7b4fc4fb2038, type: 3}
-  NpcPrefab: {fileID: 8572495700374421097, guid: 80fdf5b28b182d24ba825ed3b07e9401, type: 3}
-  NumNPC: 100
-  Destination: {fileID: 439900538}
-  StatusText: {fileID: 276019147}
-  rows_cols: 50
-  rows_rows: 30
-  NodeSelectionProb: 0.5
 --- !u!4 &1680612857
 Transform:
   m_ObjectHideFlags: 0
@@ -976,6 +956,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1680612858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680612855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91b74cc240c9a1846a994ba71e38ed1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VertexPrefab: {fileID: 5360448224127608593, guid: 92641e196c37b354580d7b4fc4fb2038, type: 3}
+  NpcPrefab: {fileID: 8572495700374421097, guid: 80fdf5b28b182d24ba825ed3b07e9401, type: 3}
+  NumNPC: 50
+  Destination: {fileID: 439900538}
+  StatusText: {fileID: 276019147}
+  rows_cols: 20
+  rows_rows: 10
+  NodeSelectionProb: 0.5
 --- !u!1 &1978456339
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,109 +5,10 @@ using UnityEngine;
 using GameAI.PathFinding;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class RandomGraph : MonoBehaviour
 {
-  #region class RandomGraphNode
-  public class RandomGraphNode : System.IEquatable<RandomGraphNode>
-  {
-    public string Name { get; set; }
-    public Vector2 Point { get; set; }
-
-    #region Constructors
-    public RandomGraphNode()
-    {
-    }
-
-    public RandomGraphNode(string names, Vector2 point)
-    {
-      Name = names;
-      Point = point;
-    }
-
-    public RandomGraphNode(string name, float x, float y)
-    {
-      Name = name;
-      Point = new Vector2(x, y);
-    }
-    #endregion
-
-    #region Functions related to Equal to hashcode
-    public override bool Equals(object obj) =>
-      this.Equals(obj as RandomGraphNode);
-
-    public bool Equals(RandomGraphNode p)
-    {
-      if (p is null)
-      {
-        return false;
-      }
-
-      // Optimization for a common success case.
-      if (System.Object.ReferenceEquals(this, p))
-      {
-        return true;
-      }
-
-      // If run-time types are not exactly the same,
-      // return false.
-      if (this.GetType() != p.GetType())
-      {
-        return false;
-      }
-
-      // Return true if the fields match.
-      // Note that the base class is not invoked 
-      // because it is System.Object, which defines 
-      // Equals as reference equality.
-      return (Name == p.Name);
-    }
-
-    public override int GetHashCode() =>
-      (Name, Point).GetHashCode();
-    #endregion
-
-    #region The cost functions and other utility functions
-    public static float Distance(RandomGraphNode a, RandomGraphNode b)
-    {
-      return (a.Point - b.Point).magnitude;
-    }
-
-    public static float GetManhattanCost(
-      RandomGraphNode a,
-      RandomGraphNode b)
-    {
-      return Mathf.Abs(a.Point.x - b.Point.x) +
-        Mathf.Abs(a.Point.y - b.Point.y);
-    }
-
-    public static float GetEuclideanCost(
-      RandomGraphNode a,
-      RandomGraphNode b)
-    {
-      return GetCostBetweenTwoStops(a, b);
-    }
-
-    public static float GetCostBetweenTwoStops(
-      RandomGraphNode a,
-      RandomGraphNode b)
-    {
-      return (a.Point - b.Point).magnitude;
-    }
-
-    public static float GetAngleBetweenTwoStops(
-      RandomGraphNode a,
-      RandomGraphNode b)
-    {
-      float delta_x = b.Point.x - a.Point.x;
-      float delta_y = b.Point.y - a.Point.y;
-      float theta_radians = Mathf.Atan2(delta_y, delta_x);
-      return theta_radians;
-    }
-    #endregion
-  }
-  #endregion
-
   Graph<RandomGraphNode> mRandomGraphNodes = new Graph<RandomGraphNode>();
   private Rect mExtent = new Rect();
 
@@ -128,6 +29,7 @@ public class RandomGraph : MonoBehaviour
   public int rows_cols = 20;
   public int rows_rows = 10;
   public float NodeSelectionProb = 0.6f;
+  public bool UseThreads = false;
 
   List<GameObject> mNPCs = new List<GameObject>();
   // The goal vertex
@@ -138,6 +40,11 @@ public class RandomGraph : MonoBehaviour
   Graph<RandomGraphNode>.Vertex mGoal;
 
   ThreadedPathFinderPool<RandomGraphNode> mThreadedPool = new ThreadedPathFinderPool<RandomGraphNode>();
+  Dictionary<PathFinderTypes, List<PathFinder<RandomGraphNode>>> mPathFinders = 
+    new Dictionary<PathFinderTypes,List<PathFinder<RandomGraphNode>>>();
+  public PathFinderTypes mPathFinderType = PathFinderTypes.ASTAR;
+  public bool mInteractive = false;
+
   List<LineRenderer> mPathViz = new List<LineRenderer>();
 
   public void CalculateExtent()
@@ -237,6 +144,10 @@ public class RandomGraph : MonoBehaviour
 
   void Start()
   {
+    mPathFinders.Add(PathFinderTypes.ASTAR, new List<PathFinder<RandomGraphNode>>());
+    mPathFinders.Add(PathFinderTypes.DJIKSTRA, new List<PathFinder<RandomGraphNode>>());
+    mPathFinders.Add(PathFinderTypes.GREEDY_BEST_FIRST, new List<PathFinder<RandomGraphNode>>());
+
     CreateRandomGraph();
 
     for (int i = 0; i < mRandomGraphNodes.Vertices.Count; ++i)
@@ -259,18 +170,27 @@ public class RandomGraph : MonoBehaviour
     }
 
     CalculateExtent();
-    Camera.main.orthographicSize = mExtent.height / 1.5f;
-    Vector3 center = mExtent.center;
-    center.z = -100.0f;
-    Camera.main.transform.position = center;
+    // by default enable camera panning.
+    CameraMovement2D camMovement = Camera.main.gameObject.GetComponent<CameraMovement2D>();
+    if (camMovement)
+    {
+      camMovement.SetCamera(Camera.main);
+      camMovement.RePositionCamera(mExtent);
+    }
+    else
+    {
+      Camera.main.orthographicSize = mExtent.height / 1.5f;
+      Vector3 center = mExtent.center;
+      center.z = -100.0f;
+      Camera.main.transform.position = center;
+    }
+
+    CreatePathFinders();
 
     for (int i = 0; i < NumNPC; ++i)
     {
       GameObject Npc = Instantiate(NpcPrefab);
       mNPCs.Add(Npc);
-      ThreadedPathFinder<RandomGraphNode> tpf = mThreadedPool.CreateThreadedAStarPathFinder();
-      tpf.PathFinder.HeuristicCost = RandomGraphNode.GetManhattanCost;
-      tpf.PathFinder.NodeTraversalCost = RandomGraphNode.GetEuclideanCost;
 
       // We create a line renderer to show the path.
       LineRenderer lr = Npc.AddComponent<LineRenderer>();
@@ -281,6 +201,32 @@ public class RandomGraph : MonoBehaviour
       lr.endColor = Color.magenta;
     }
     RandomizeNPCs();
+  }
+
+  void CreatePathFinders()
+  {
+    for (int i = 0; i < NumNPC; ++i)
+    {
+      // We create the different path finders
+      ThreadedPathFinder<RandomGraphNode> tpf = mThreadedPool.CreateThreadedAStarPathFinder();
+      tpf.PathFinder.HeuristicCost = RandomGraphNode.GetManhattanCost;
+      tpf.PathFinder.NodeTraversalCost = RandomGraphNode.GetEuclideanCost;
+
+      AStarPathFinder<RandomGraphNode> pf1 = new AStarPathFinder<RandomGraphNode>();
+      DijkstraPathFinder<RandomGraphNode> pf2 = new DijkstraPathFinder<RandomGraphNode>();
+      GreedyPathFinder<RandomGraphNode> pf3 = new GreedyPathFinder<RandomGraphNode>();
+
+      mPathFinders[PathFinderTypes.ASTAR].Add(pf1);
+      mPathFinders[PathFinderTypes.DJIKSTRA].Add(pf2);
+      mPathFinders[PathFinderTypes.GREEDY_BEST_FIRST].Add(pf3);
+
+      pf1.HeuristicCost = RandomGraphNode.GetManhattanCost;
+      pf1.NodeTraversalCost = RandomGraphNode.GetEuclideanCost;
+      pf2.HeuristicCost = RandomGraphNode.GetManhattanCost;
+      pf2.NodeTraversalCost = RandomGraphNode.GetEuclideanCost;
+      pf3.HeuristicCost = RandomGraphNode.GetManhattanCost;
+      pf3.NodeTraversalCost = RandomGraphNode.GetEuclideanCost;
+    }
   }
 
   public void RandomizeNPCs()
@@ -307,28 +253,25 @@ public class RandomGraph : MonoBehaviour
       Input.GetMouseButtonDown(0))
     {
       RayCastAndSetDestination();
-
-      // clear old lines.
-      for(int i = 0; i <NumNPC; ++i)
-      {
-        mPathViz[i].positionCount = 0;
-      }
     }
 
-    for(int i = 0; i < NumNPC; ++i)
+    if (UseThreads)
     {
-      if(mThreadedPool.GetThreadedPathFinder(i).Done)
+      for (int i = 0; i < NumNPC; ++i)
       {
-        PathFinder<RandomGraphNode> pf = mThreadedPool.GetThreadedPathFinder(i).PathFinder;
-        mThreadedPool.GetThreadedPathFinder(i).Done = false;
+        if (mThreadedPool.GetThreadedPathFinder(i).Done)
+        {
+          PathFinder<RandomGraphNode> pf = mThreadedPool.GetThreadedPathFinder(i).PathFinder;
+          mThreadedPool.GetThreadedPathFinder(i).Done = false;
 
-        if(pf.Status == PathFinderStatus.SUCCESS)
-        {
-          OnPathFound(i);
-        }
-        else if(pf.Status == PathFinderStatus.FAILURE)
-        {
-          OnPathNotFound(i);
+          if (pf.Status == PathFinderStatus.SUCCESS)
+          {
+            OnPathFound(i);
+          }
+          else if (pf.Status == PathFinderStatus.FAILURE)
+          {
+            OnPathNotFound(i);
+          }
         }
       }
     }
@@ -336,14 +279,38 @@ public class RandomGraph : MonoBehaviour
 
   void RayCastAndSetDestination()
   {
+    // disable picking if we hit the UI.
+    if (EventSystem.current.IsPointerOverGameObject())
+    {
+      return;
+    }
+
     Vector2 rayPos = new Vector2(
         Camera.main.ScreenToWorldPoint(Input.mousePosition).x,
         Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
 
     RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
 
+    // by default enable camera panning.
+    CameraMovement2D camMovement = Camera.main.gameObject.GetComponent<CameraMovement2D>();
+    if(camMovement)
+    {
+      CameraMovement2D.CameraPanning = true;
+    }
+
     if (hit)
     {
+      // clear old lines.
+      for (int i = 0; i < NumNPC; ++i)
+      {
+        mPathViz[i].positionCount = 0;
+      }
+
+      if (camMovement)
+      {
+        CameraMovement2D.CameraPanning = false;
+      }
+      // disable camera panning if
       GameObject obj = hit.transform.gameObject;
       RandomGraphNode_Viz sc = obj.GetComponent<RandomGraphNode_Viz>();
       if (sc == null) return;
@@ -356,32 +323,65 @@ public class RandomGraph : MonoBehaviour
 
       mGoal = sc.Vertex;
 
-      // create threaded pool.
-      for(int i = 0; i < mNPCs.Count; ++i)
+      if (UseThreads)
       {
-        mThreadedPool.FindPath(i, mNPCStartPositions[i], mGoal);
+        for (int i = 0; i < mNPCs.Count; ++i)
+        {
+          mThreadedPool.FindPath(i, mNPCStartPositions[i], mGoal);
+        }
+      }
+      else
+      {
+        for (int i = 0; i < mNPCs.Count; ++i)
+        {
+          mPathFinders[mPathFinderType][i].Initialize(mNPCStartPositions[i], mGoal);
+          if (!mInteractive)
+          {
+            // its not interactive so we start the coroutine.
+            StartCoroutine(Coroutine_FindPathSteps(i));
+          }
+        }
       }
     }
   }
 
-  IEnumerator Coroutine_FindPathSteps(PathFinder<RandomGraphNode> pathFinder)
+  IEnumerator Coroutine_FindPathSteps(int index)
   {
+    PathFinder<RandomGraphNode> pathFinder = mPathFinders[mPathFinderType][index];
     while (pathFinder.Status == PathFinderStatus.RUNNING)
     {
       pathFinder.Step();
       yield return null;
     }
+
+    if(pathFinder.Status == PathFinderStatus.SUCCESS)
+    {
+      OnPathFound(index);
+    }
+    else if(pathFinder.Status == PathFinderStatus.FAILURE)
+    {
+      OnPathNotFound(index);
+    }
   }
 
   public void OnPathFound(int index)
   {
-    ThreadedPathFinder<RandomGraphNode> tpf = mThreadedPool.GetThreadedPathFinder(index);
     if (StatusText)
     {
-      //StatusText.text = "Path found to destination";
+      StatusText.text = "Path found to destination";
     }
-    PathFinder<RandomGraphNode>.PathFinderNode node =
-      tpf.PathFinder.CurrentNode;
+    PathFinder<RandomGraphNode>.PathFinderNode node = null;
+
+    if (UseThreads)
+    {
+      ThreadedPathFinder<RandomGraphNode> tpf = mThreadedPool.GetThreadedPathFinder(index);
+      node = tpf.PathFinder.CurrentNode;
+    }
+    else
+    {
+      node = mPathFinders[mPathFinderType][index].CurrentNode;
+    }
+
     List<RandomGraphNode> reverse_indices = new List<RandomGraphNode>();
 
     while (node != null)
@@ -404,6 +404,7 @@ public class RandomGraph : MonoBehaviour
         reverse_indices[i].Point.y,
         0.0f));
     }
+    mNPCStartPositions[index] = mGoal;
   }
 
   void OnPathNotFound(int i)
@@ -411,7 +412,7 @@ public class RandomGraph : MonoBehaviour
     Debug.Log(i + " - Cannot find path to destination");
     if(StatusText)
     {
-      //StatusText.text = "Cannot find path to destination";
+      StatusText.text = "Cannot find path to destination";
     }
   }
 
