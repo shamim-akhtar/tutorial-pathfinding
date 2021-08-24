@@ -4155,7 +4155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VertexPrefab: {fileID: 5360448224127608593, guid: 92641e196c37b354580d7b4fc4fb2038, type: 3}
   NpcPrefab: {fileID: 8572495700374421097, guid: 80fdf5b28b182d24ba825ed3b07e9401, type: 3}
-  NumNPC: 10
+  NumNPC: 1
   Destination: {fileID: 1265389166}
   StatusText: {fileID: 117743483}
   rows_cols: 30
@@ -4164,6 +4164,10 @@ MonoBehaviour:
   UseThreads: 0
   mPathFinderType: 0
   mInteractive: 0
+  COLOR_DEFAULT: {r: 1, g: 1, b: 0, a: 1}
+  COLOR_OPEN_LIST: {r: 0.09104663, g: 0.09104663, b: 0.6226415, a: 0.9019608}
+  COLOR_CLOSED_LIST: {r: 0, g: 0, b: 0, a: 0.3}
+  COLOR_CURRENT_NODE: {r: 1, g: 0, b: 0, a: 0.8666667}
 --- !u!1 &845542577
 GameObject:
   m_ObjectHideFlags: 0

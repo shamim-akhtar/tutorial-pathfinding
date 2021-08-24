@@ -43,12 +43,17 @@ public class CameraMovement2D : MonoBehaviour
   void Update()
   {
     // Camera panning is disabled when a tile is selected.
-    if (!CameraPanning) return;
+    if (!CameraPanning)
+    {
+      mDragging = false;
+      return;
+    }
 
     // We also check if the pointer is not on UI item
     // or is disabled.
     if (EventSystem.current.IsPointerOverGameObject() || enabled == false)
     {
+      //mDragging = false;
       return;
     }
 

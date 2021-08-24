@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  m_Color: {r: 0.8392157, g: 0.8377243, b: 0.16862746, a: 1}
+  m_Color: {r: 1, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 5360448224127608592}
   - component: {fileID: 6290397254181031554}
   - component: {fileID: 5360448224127608595}
+  - component: {fileID: 2138329714463219887}
   m_Layer: 0
   m_Name: Vertex_Viz
   m_TagString: Untagged
@@ -146,6 +147,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mOriginalCameraSize: 20
   OrigScale: {x: 1, y: 1, z: 1}
+--- !u!114 &2138329714463219887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5360448224127608593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6ea38b26b653964c9b9cd6dd7305c5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InnerSprite: {fileID: 5360448223164448179}
+  OuterSprite: {fileID: 5360448224400971377}
 --- !u!1 &5360448224400971383
 GameObject:
   m_ObjectHideFlags: 0

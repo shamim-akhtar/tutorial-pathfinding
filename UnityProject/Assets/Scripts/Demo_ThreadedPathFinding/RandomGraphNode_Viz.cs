@@ -15,6 +15,18 @@ public class RandomGraphNode_Viz : MonoBehaviour
   private Graph<RandomGraphNode>.Vertex mVertex;
 
   List<GameObject> mLines = new List<GameObject>();
+  public SpriteRenderer InnerSprite;
+  public SpriteRenderer OuterSprite;
+
+  public void SetInnerColor(Color col)
+  {
+    InnerSprite.color = col;
+  }
+
+  public void SetOuterColor(Color col)
+  {
+    OuterSprite.color = col;
+  }
 
   private LineRenderer GetOrCreateLine(int index)
   {
