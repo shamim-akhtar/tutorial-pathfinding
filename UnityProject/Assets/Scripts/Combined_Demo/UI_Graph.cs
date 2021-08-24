@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI : MonoBehaviour
+public class UI_Graph : MonoBehaviour
 {
+  public RandomGraph mDemo;
+
   public Text TitleText;
   public LeanSwitch mSwitchAlgo;
   public Text mAlgoText;
   public LeanToggle mToggleCostFunction;
   public Text mCostFunctionText;
-  enum CostFunctionType
+  public enum CostFunctionType
   {
     MANHATTAN,
     EUCLIDEN,
@@ -44,9 +46,9 @@ public class UI : MonoBehaviour
   public Button mBtnGraph;
   public Button mBtnRandomizeNPC;
 
-  public Text mTextFCost;
-  public Text mTextGCost;
-  public Text mTextHCost;
+  //public Text mTextFCost;
+  //public Text mTextGCost;
+  //public Text mTextHCost;
   public GameObject mNotification;
   public Text mTextNotification;
 
@@ -55,7 +57,7 @@ public class UI : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
-
+    SetTitle("Pathdinding Playground - Graphs");
   }
 
   // Update is called once per frame
@@ -71,18 +73,16 @@ public class UI : MonoBehaviour
 
   public void SetToggleCostFunction()
   {
-    //if (mPathFinder_Viz.mPathFinder == null)
-    //  return;
-    //if (mPathFinder_Viz.mPathFinder != null && mPathFinder_Viz.mPathFinder.Status == PathFinderStatus.RUNNING)
-    //{
-    //  // disable selection when running.
-    //  if (mToggleCostFunction.On)
-    //    mToggleCostFunction.TurnOff();
-    //  else
-    //    mToggleCostFunction.TurnOn();
-    //  return;
-    //}
-
+    if (mDemo.IsAnyPathFinderRunning())
+    {
+      ShowNotification("Pathfinder running. Cannot change cost function.\nif you are using interactive mode then click the Play button to force complete pathfinding.");
+      // disable selection when running.
+      if (mToggleCostFunction.On)
+        mToggleCostFunction.TurnOff();
+      else
+        mToggleCostFunction.TurnOn();
+      return;
+    }
     if (mCostFunctionType == CostFunctionType.MANHATTAN)
     {
       mCostFunctionType = CostFunctionType.EUCLIDEN;
@@ -93,7 +93,6 @@ public class UI : MonoBehaviour
       mCostFunctionType = CostFunctionType.MANHATTAN;
       mCostFunctionText.text = "Manhattan Cost";
     }
-    //SetCostFunction(mCostFunctionType);
   }
 
   public void SetToggleMode()
@@ -110,15 +109,27 @@ public class UI : MonoBehaviour
     }
   }
 
-
   public void SetToggleInteractive()
   {
+    if(mDemo.IsAnyPathFinderRunning())
+    {
+      ShowNotification("Pathfining in progress. Cannot toggle interactive mode.\nif you are using interactive mode then click the Play button to force complete pathfinding.");
+      // disable selection when running.
+      if (mToggleInteractive.On)
+        mToggleInteractive.TurnOff();
+      else
+        mToggleInteractive.TurnOn();
+      return;
+    }
+
     if (mInteractiveType == InteractiveType.NON_INTERACTIVE)
     {
       mInteractiveType = InteractiveType.INTERACTIVE;
       mToggleInteractiveText.text = "Interactive";
       mBtnPlay.gameObject.SetActive(true);
       mBtnNext.gameObject.SetActive(true);
+
+      mDemo.SetInteractive(true);
     }
     else
     {
@@ -126,25 +137,28 @@ public class UI : MonoBehaviour
       mToggleInteractiveText.text = "Non Interactive";
       mBtnPlay.gameObject.SetActive(false);
       mBtnNext.gameObject.SetActive(false);
+      mDemo.SetInteractive(false);
     }
   }
 
   public void OnClickBtn_Reset()
   {
-    mTextFCost.text = "";
-    mTextGCost.text = "";
-    mTextHCost.text = "";
-
+    if (mDemo.IsAnyPathFinderRunning())
+    {
+      ShowNotification("Cannot reset. Pathfining in progress.\nif you are using interactive mode then click the Play button to force complete pathfinding.");
+      return;
+    }
+    mDemo.ResetLastDestination();
   }
 
   public void OnClickBtn_Play()
   {
-
+    mDemo.PathFindingStepForcComplete();
   }
 
   public void OnClickBtn_Next()
   {
-
+    mDemo.PathFindingStep();
   }
 
   public void OnClickBtn_8Puzzle()
@@ -164,49 +178,64 @@ public class UI : MonoBehaviour
 
   public void OnClickBtn_RandomizeNPC()
   {
+    mDemo.RandomizeNPCs();
+  }
 
+  public void OnClickBtn_RandomizeGraph()
+  {
+    mDemo.OnClickRegenerate();
   }
 
   public void OnSelectAlgorithm()
   {
+    if(mDemo.IsAnyPathFinderRunning())
+    {
+      mSwitchAlgo.State = (int)mPathFindingAlgo;
+      ShowNotification("Pathfinder running. Cannot change algorithm.\nif you are using interactive mode then click the Play button to force complete pathfinding.");
+      return;
+    }
+
+    if(!mDemo.mInteractive)
+    {
+      mSwitchAlgo.State = (int)mPathFindingAlgo;
+      ShowNotification("Toggle to interactive mode to switch pathfinder algorithm. Non interactive mode uses the AStar pathfinder using threads.");
+      return;
+    }
     mPathFindingAlgo = mSwitchAlgo.State;
     if (mPathFindingAlgo == 0)
     {
       mAlgoText.text = "Astar";
       mAlgoText.alignment = TextAnchor.MiddleLeft;
+      mDemo.mPathFinderType = GameAI.PathFinding.PathFinderTypes.ASTAR;
     }
     if (mPathFindingAlgo == 1)
     {
       mAlgoText.text = "Dijkstra";
       mAlgoText.alignment = TextAnchor.MiddleCenter;
+      mDemo.mPathFinderType = GameAI.PathFinding.PathFinderTypes.DJIKSTRA;
     }
     if (mPathFindingAlgo == 2)
     {
       mAlgoText.text = "Greedy Best-First";
       mAlgoText.alignment = TextAnchor.MiddleRight;
+      mDemo.mPathFinderType = GameAI.PathFinding.PathFinderTypes.GREEDY_BEST_FIRST;
     }
-    //mPathFinder_Viz.SetPathFindingAlgorithm((PathFindingAlgorithm)mPathFindingAlgo);
-    //SetCostFunction(mCostFunctionType);
-    //mPathFinder_Viz.mPathFinder.onFailure += OnPathFindingCompleted;
-    //mPathFinder_Viz.mPathFinder.onSuccess += OnPathFindingCompleted;
-    //mPathFinder_Viz.mPathFinder.onStarted += OnPathFindingStarted;
-    //mPathFinder_Viz.mPathFinder.onChangeCurrentNode += OnChangeCurrentNode;
   }
 
-  public void SetFCost(float cost)
-  {
-      mTextFCost.text = cost.ToString("F2");
-  }
+  //public void SetFCost(float cost)
+  //{
+  //    mTextFCost.text = cost.ToString("F2");
+  //}
 
-  public void SetHCost(float cost)
-  {
-    mTextHCost.text = cost.ToString("F2");
-  }
+  //public void SetHCost(float cost)
+  //{
+  //  mTextHCost.text = cost.ToString("F2");
+  //}
 
-  public void SetGCost(float cost)
-  {
-    mTextGCost.text = cost.ToString("F2");
-  }
+  //public void SetGCost(float cost)
+  //{
+  //  mTextGCost.text = cost.ToString("F2");
+  //}
 
   public void ShowNotification(string text, float duration = 5.0f)
   {

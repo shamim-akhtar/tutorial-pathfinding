@@ -54,6 +54,28 @@ public class ThreadedPathFinderPool<T>
     return tpf;
   }
 
+  public ThreadedPathFinder<T>
+    CreateThreadedDijkstraPathFinder()
+  {
+    ThreadedPathFinder<T> tpf =
+      new ThreadedPathFinder<T>(
+        new DijkstraPathFinder<T>(),
+        mPathFinders.Count);
+    mPathFinders.Add(tpf);
+    return tpf;
+  }
+
+  public ThreadedPathFinder<T>
+    CreateThreadedGreedyPathFinder()
+  {
+    ThreadedPathFinder<T> tpf =
+      new ThreadedPathFinder<T>(
+        new GreedyPathFinder<T>(),
+        mPathFinders.Count);
+    mPathFinders.Add(tpf);
+    return tpf;
+  }
+
   public ThreadedPathFinder<T> 
     GetThreadedPathFinder(int index)
   {

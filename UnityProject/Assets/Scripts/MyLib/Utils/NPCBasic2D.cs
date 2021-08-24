@@ -22,6 +22,12 @@ public class NPCBasic2D : MonoBehaviour
     mWayPoints.Enqueue(pt);
   }
 
+  public void SetPosition(float x, float y)
+  {
+    mWayPoints.Clear();
+    transform.position = new Vector3(x, y, transform.position.z);
+  }
+
   public IEnumerator Coroutine_MoveTo()
   {
     while (true)

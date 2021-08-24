@@ -213,8 +213,8 @@ namespace GameAI
         PathFinderNode root = new PathFinderNode(Start, null, 0f, H);
 
         // add this root node to our open list.
-        //mOpenList.Add(root);
-        mOpenList.Enqueue(root);
+        mOpenList.Add(root);
+        //mOpenList.Enqueue(root);
 
         // set the current node to root node.
         CurrentNode = root;
@@ -250,14 +250,14 @@ namespace GameAI
 
         // Get the least cost element from the open list. 
         // This becomes our new current node.
-        //CurrentNode = GetLeastCostNode(mOpenList);
-        CurrentNode = mOpenList.Dequeue();
+        CurrentNode = GetLeastCostNode(mOpenList);
+        //CurrentNode = mOpenList.Dequeue();
 
         // Call the delegate to inform any subscribers.
         onChangeCurrentNode?.Invoke(CurrentNode);
 
         // Remove the node from the open list.
-        //mOpenList.Remove(CurrentNode);
+        mOpenList.Remove(CurrentNode);
 
         // Check if the node contains the Goal cell.
         if (EqualityComparer<T>.Default.Equals(

@@ -31,7 +31,7 @@ public class CameraMovement2D : MonoBehaviour
 
   public void RePositionCamera(Rect extent)
   {
-    Camera.main.orthographicSize = extent.height / 1.5f;
+    Camera.main.orthographicSize = extent.height / 1.25f;
     Vector3 center = extent.center;
     center.z = -100.0f;
     Camera.main.transform.position = center;

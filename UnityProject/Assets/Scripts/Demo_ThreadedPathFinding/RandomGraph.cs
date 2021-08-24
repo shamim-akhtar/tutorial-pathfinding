@@ -31,9 +31,14 @@ public class RandomGraph : MonoBehaviour
   public float NodeSelectionProb = 0.6f;
   public bool UseThreads = false;
 
+  public Text mTextFCost;
+  public Text mTextGCost;
+  public Text mTextHCost;
+
   List<GameObject> mNPCs = new List<GameObject>();
-  // The goal vertex
   List<Graph<RandomGraphNode>.Vertex> mNPCStartPositions = 
+    new List<Graph<RandomGraphNode>.Vertex>();
+  List<Graph<RandomGraphNode>.Vertex> mNPCStartPositionsPrev =
     new List<Graph<RandomGraphNode>.Vertex>();
 
   // The start vertex.
@@ -240,6 +245,7 @@ public class RandomGraph : MonoBehaviour
   public void RandomizeNPCs()
   {
     mNPCStartPositions.Clear();
+    mNPCStartPositionsPrev.Clear();
     for (int i = 0; i < NumNPC; ++i)
     {
       // randomly place our NPCs
@@ -252,6 +258,7 @@ public class RandomGraph : MonoBehaviour
         -2.0f);
 
       mNPCStartPositions.Add(mRandomGraphNodes.Vertices[randIndex]);
+      mNPCStartPositionsPrev.Add(mRandomGraphNodes.Vertices[randIndex]);
     }
   }
 
@@ -316,16 +323,6 @@ public class RandomGraph : MonoBehaviour
 
     if (hit)
     {
-      // clear old lines.
-      for (int i = 0; i < NumNPC; ++i)
-      {
-        mPathViz[i].positionCount = 0;
-        mPathDisplayed[i] = false;
-      }
-      foreach (KeyValuePair<RandomGraphNode, RandomGraphNode_Viz> entry in mNodeVertex_VizDic)
-      {
-        entry.Value.SetInnerColor(COLOR_DEFAULT);
-      }
 
       if (camMovement)
       {
@@ -344,23 +341,39 @@ public class RandomGraph : MonoBehaviour
 
       mGoal = sc.Vertex;
 
-      if (UseThreads)
+      FindPath();
+    }
+  }
+
+  public void FindPath()
+  {
+    // clear old lines.
+    for (int i = 0; i < NumNPC; ++i)
+    {
+      mPathViz[i].positionCount = 0;
+      mPathDisplayed[i] = false;
+    }
+    foreach (KeyValuePair<RandomGraphNode, RandomGraphNode_Viz> entry in mNodeVertex_VizDic)
+    {
+      entry.Value.SetInnerColor(COLOR_DEFAULT);
+    }
+
+    if (UseThreads)
+    {
+      for (int i = 0; i < mNPCs.Count; ++i)
       {
-        for (int i = 0; i < mNPCs.Count; ++i)
-        {
-          mThreadedPool.FindPath(i, mNPCStartPositions[i], mGoal);
-        }
+        mThreadedPool.FindPath(i, mNPCStartPositions[i], mGoal);
       }
-      else
+    }
+    else
+    {
+      for (int i = 0; i < mNPCs.Count; ++i)
       {
-        for (int i = 0; i < mNPCs.Count; ++i)
+        mPathFinders[mPathFinderType][i].Initialize(mNPCStartPositions[i], mGoal);
+        if (!mInteractive)
         {
-          mPathFinders[mPathFinderType][i].Initialize(mNPCStartPositions[i], mGoal);
-          if (!mInteractive)
-          {
-            // its not interactive so we start the coroutine.
-            StartCoroutine(Coroutine_FindPathSteps(i));
-          }
+          // its not interactive so we start the coroutine.
+          StartCoroutine(Coroutine_FindPathSteps(i));
         }
       }
     }
@@ -391,6 +404,18 @@ public class RandomGraph : MonoBehaviour
           OnPathNotFound(index);
           mPathDisplayed[index] = true;
         }
+      }
+    }
+  }
+
+  public void PathFindingStepForcComplete()
+  {
+    if (mInteractive)
+    {
+      for (int i = 0; i < mPathFinders[mPathFinderType].Count; ++i)
+      {
+        if (mPathDisplayed[i]) continue;
+        StartCoroutine(Coroutine_FindPathSteps(i));
       }
     }
   }
@@ -432,6 +457,10 @@ public class RandomGraph : MonoBehaviour
       node = mPathFinders[mPathFinderType][index].CurrentNode;
     }
 
+    SetFCost(node.Fcost);
+    SetGCost(node.GCost);
+    SetHCost(node.Hcost);
+
     List<RandomGraphNode> reverse_indices = new List<RandomGraphNode>();
 
     while (node != null)
@@ -454,6 +483,8 @@ public class RandomGraph : MonoBehaviour
         reverse_indices[i].Point.y,
         0.0f));
     }
+    // save these as the previous start positions.
+    mNPCStartPositionsPrev[index] = mNPCStartPositions[index];
     mNPCStartPositions[index] = mGoal;
   }
 
@@ -468,7 +499,7 @@ public class RandomGraph : MonoBehaviour
 
   public void OnClickRegenerate()
   {
-    SceneManager.LoadScene("Demo_ThreadedPathFinding");
+    SceneManager.LoadScene("Combined_Demo_Graph");
   }
 
   public void OnClickRandomizeNPCs()
@@ -481,12 +512,35 @@ public class RandomGraph : MonoBehaviour
     mInteractive = flag;
     if(mInteractive)
     {
+      UseThreads = false;
       for(int i = 0; i < NumNPC; ++i)
       {
-        mPathFinders[mPathFinderType][i].onChangeCurrentNode = OnChangeCurrentNode;
-        mPathFinders[mPathFinderType][i].onAddToClosedList = OnAddToClosedList;
-        mPathFinders[mPathFinderType][i].onAddToOpenList = OnAddToOpenList;
+        mPathFinders[PathFinderTypes.ASTAR][i].onChangeCurrentNode = OnChangeCurrentNode;
+        mPathFinders[PathFinderTypes.ASTAR][i].onAddToClosedList = OnAddToClosedList;
+        mPathFinders[PathFinderTypes.ASTAR][i].onAddToOpenList = OnAddToOpenList;
+        mPathFinders[PathFinderTypes.DJIKSTRA][i].onChangeCurrentNode = OnChangeCurrentNode;
+        mPathFinders[PathFinderTypes.DJIKSTRA][i].onAddToClosedList = OnAddToClosedList;
+        mPathFinders[PathFinderTypes.DJIKSTRA][i].onAddToOpenList = OnAddToOpenList;
+        mPathFinders[PathFinderTypes.GREEDY_BEST_FIRST][i].onChangeCurrentNode = OnChangeCurrentNode;
+        mPathFinders[PathFinderTypes.GREEDY_BEST_FIRST][i].onAddToClosedList = OnAddToClosedList;
+        mPathFinders[PathFinderTypes.GREEDY_BEST_FIRST][i].onAddToOpenList = OnAddToOpenList;
       }
+    }
+    else
+    {
+      for (int i = 0; i < NumNPC; ++i)
+      {
+        mPathFinders[PathFinderTypes.ASTAR][i].onChangeCurrentNode = null;// OnChangeCurrentNode;
+        mPathFinders[PathFinderTypes.ASTAR][i].onAddToClosedList = null;// OnAddToClosedList;
+        mPathFinders[PathFinderTypes.ASTAR][i].onAddToOpenList = null;// OnAddToOpenList;
+        mPathFinders[PathFinderTypes.DJIKSTRA][i].onChangeCurrentNode = null;// OnChangeCurrentNode;
+        mPathFinders[PathFinderTypes.DJIKSTRA][i].onAddToClosedList = null;// OnAddToClosedList;
+        mPathFinders[PathFinderTypes.DJIKSTRA][i].onAddToOpenList = null;// OnAddToOpenList;
+        mPathFinders[PathFinderTypes.GREEDY_BEST_FIRST][i].onChangeCurrentNode = null;// OnChangeCurrentNode;
+        mPathFinders[PathFinderTypes.GREEDY_BEST_FIRST][i].onAddToClosedList = null;// OnAddToClosedList;
+        mPathFinders[PathFinderTypes.GREEDY_BEST_FIRST][i].onAddToOpenList = null;// OnAddToOpenList;
+      }
+      UseThreads = true;
     }
   }
 
@@ -497,6 +551,9 @@ public class RandomGraph : MonoBehaviour
   public void OnChangeCurrentNode(PathFinder<RandomGraphNode>.PathFinderNode node)
   {
     Update_Vertex_Viz(node, COLOR_CURRENT_NODE);
+    SetFCost(node.Fcost);
+    SetGCost(node.GCost);
+    SetHCost(node.Hcost);
   }
 
   public void OnAddToOpenList(PathFinder<RandomGraphNode>.PathFinderNode node)
@@ -516,5 +573,72 @@ public class RandomGraph : MonoBehaviour
     {
       cellScript.SetInnerColor(color);
     }
+  }
+
+  public void SetFCost(float cost)
+  {
+    mTextFCost.text = cost.ToString("F2");
+  }
+
+  public void SetHCost(float cost)
+  {
+    mTextHCost.text = cost.ToString("F2");
+  }
+
+  public void SetGCost(float cost)
+  {
+    mTextGCost.text = cost.ToString("F2");
+  }
+
+  public bool IsAnyPathFinderRunning()
+  {
+    for (int i = 0; i < mPathFinders[mPathFinderType].Count; ++i)
+    {
+      if (mPathFinders[mPathFinderType][i].Status == PathFinderStatus.RUNNING)
+        return true;
+    }
+    return false;
+  }
+
+  public void SetCostFunctionType(UI_Graph.CostFunctionType type)
+  {
+    if(type == UI_Graph.CostFunctionType.EUCLIDEN)
+    {
+      for (int i = 0; i < NumNPC; ++i)
+      {
+        // We create the different path finders
+        ThreadedPathFinder<RandomGraphNode> tpf = mThreadedPool.GetThreadedPathFinder(i);
+        tpf.PathFinder.HeuristicCost = RandomGraphNode.GetManhattanCost;
+        tpf.PathFinder.NodeTraversalCost = RandomGraphNode.GetEuclideanCost;
+
+        PathFinder<RandomGraphNode> pf1 = mPathFinders[PathFinderTypes.ASTAR][i];
+        PathFinder<RandomGraphNode> pf2 = mPathFinders[PathFinderTypes.DJIKSTRA][i];
+        PathFinder<RandomGraphNode> pf3 = mPathFinders[PathFinderTypes.GREEDY_BEST_FIRST][i];
+
+        pf1.HeuristicCost = RandomGraphNode.GetManhattanCost;
+        pf1.NodeTraversalCost = RandomGraphNode.GetEuclideanCost;
+        pf2.HeuristicCost = RandomGraphNode.GetManhattanCost;
+        pf2.NodeTraversalCost = RandomGraphNode.GetEuclideanCost;
+        pf3.HeuristicCost = RandomGraphNode.GetManhattanCost;
+        pf3.NodeTraversalCost = RandomGraphNode.GetEuclideanCost;
+      }
+    }
+  }
+
+  public void ResetLastDestination()
+  {
+    SetHCost(0.0f);
+    SetGCost(0.0f);
+    SetHCost(0.0f);
+    for (int i = 0; i < mNPCStartPositionsPrev.Count; ++i)
+    {
+      mNPCStartPositions[i] = mNPCStartPositionsPrev[i];
+      NPC npc = mNPCs[i].GetComponent<NPC>();
+      if (npc)
+      {
+        npc.SetPosition(mNPCStartPositions[i].Value.Point.x, mNPCStartPositions[i].Value.Point.y);
+      }
+    }
+    FindPath();
   }
 }
