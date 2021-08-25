@@ -10,7 +10,7 @@ public class RectGridCell_Viz : MonoBehaviour
   [SerializeField]
   SpriteRenderer OuterSprite;
 
-  public RectGridCell RectGridCell;
+  public RectGrid.Cell RectGridCell;
   //public TextMesh FCostText;
   //public TextMesh HCostText;
   //public TextMesh GCostText;

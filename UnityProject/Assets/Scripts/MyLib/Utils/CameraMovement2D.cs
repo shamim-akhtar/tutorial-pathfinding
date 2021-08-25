@@ -20,6 +20,7 @@ public class CameraMovement2D : MonoBehaviour
 
   void Start()
   {
+    SetCamera(Camera.main);
   }
 
   public void SetCamera(Camera camera)
@@ -38,6 +39,12 @@ public class CameraMovement2D : MonoBehaviour
 
     mCameraSizeMax = mCamera.orthographicSize;
     mOriginalPosition = mCamera.transform.position;
+  }
+
+  public void RePositionCamera(float width, float height)
+  {
+    Rect extent = new Rect(0.0f, 0.0f, width, height);
+    RePositionCamera(extent);
   }
 
   void Update()

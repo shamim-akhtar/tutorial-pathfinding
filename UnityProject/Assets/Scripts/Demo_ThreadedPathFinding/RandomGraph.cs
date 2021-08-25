@@ -35,6 +35,11 @@ public class RandomGraph : MonoBehaviour
   public Text mTextGCost;
   public Text mTextHCost;
 
+  public Color COLOR_DEFAULT = new Color(1.0f, 1.0f, 0.0f, 1.0f);
+  public Color COLOR_OPEN_LIST = new Color(0.0f, 0.0f, 1.0f, 0.3f);
+  public Color COLOR_CLOSED_LIST = new Color(0.0f, 0.0f, 0.0f, 0.3f);
+  public Color COLOR_CURRENT_NODE = new Color(1.0f, 0.0f, 0.0f, 0.3f);
+
   List<GameObject> mNPCs = new List<GameObject>();
   List<Graph<RandomGraphNode>.Vertex> mNPCStartPositions = 
     new List<Graph<RandomGraphNode>.Vertex>();
@@ -47,7 +52,7 @@ public class RandomGraph : MonoBehaviour
   ThreadedPathFinderPool<RandomGraphNode> mThreadedPool = new ThreadedPathFinderPool<RandomGraphNode>();
   Dictionary<PathFinderTypes, List<PathFinder<RandomGraphNode>>> mPathFinders = 
     new Dictionary<PathFinderTypes,List<PathFinder<RandomGraphNode>>>();
-  List<bool> mPathDisplayed = new List<bool>();
+  List<bool> mPathCalculated = new List<bool>();
   public PathFinderTypes mPathFinderType = PathFinderTypes.ASTAR;
   public bool mInteractive = false;
 
@@ -238,7 +243,7 @@ public class RandomGraph : MonoBehaviour
       pf3.HeuristicCost = RandomGraphNode.GetManhattanCost;
       pf3.NodeTraversalCost = RandomGraphNode.GetEuclideanCost;
 
-      mPathDisplayed.Add(false);
+      mPathCalculated.Add(false);
     }
   }
 
@@ -277,7 +282,11 @@ public class RandomGraph : MonoBehaviour
         PathFindingStep();
       }
     }
+    SyncThreads();
+  }
 
+  void SyncThreads()
+  {
     if (UseThreads)
     {
       for (int i = 0; i < NumNPC; ++i)
@@ -351,7 +360,7 @@ public class RandomGraph : MonoBehaviour
     for (int i = 0; i < NumNPC; ++i)
     {
       mPathViz[i].positionCount = 0;
-      mPathDisplayed[i] = false;
+      mPathCalculated[i] = false;
     }
     foreach (KeyValuePair<RandomGraphNode, RandomGraphNode_Viz> entry in mNodeVertex_VizDic)
     {
@@ -385,7 +394,7 @@ public class RandomGraph : MonoBehaviour
     {
       for(int i = 0; i < mPathFinders[mPathFinderType].Count; ++i)
       {
-        if (mPathDisplayed[i]) continue;
+        if (mPathCalculated[i]) continue;
 
         int index = i;
         PathFinder<RandomGraphNode> pathFinder = mPathFinders[mPathFinderType][index];
@@ -397,12 +406,12 @@ public class RandomGraph : MonoBehaviour
         if (pathFinder.Status == PathFinderStatus.SUCCESS)
         {
           OnPathFound(index);
-          mPathDisplayed[index] = true;
+          mPathCalculated[index] = true;
         }
         else if (pathFinder.Status == PathFinderStatus.FAILURE)
         {
           OnPathNotFound(index);
-          mPathDisplayed[index] = true;
+          mPathCalculated[index] = true;
         }
       }
     }
@@ -414,7 +423,7 @@ public class RandomGraph : MonoBehaviour
     {
       for (int i = 0; i < mPathFinders[mPathFinderType].Count; ++i)
       {
-        if (mPathDisplayed[i]) continue;
+        if (mPathCalculated[i]) continue;
         StartCoroutine(Coroutine_FindPathSteps(i));
       }
     }
@@ -544,10 +553,6 @@ public class RandomGraph : MonoBehaviour
     }
   }
 
-  public Color COLOR_DEFAULT = new Color(1.0f, 1.0f, 0.0f, 1.0f);
-  public Color COLOR_OPEN_LIST = new Color(0.0f, 0.0f, 1.0f, 0.3f);
-  public Color COLOR_CLOSED_LIST = new Color(0.0f, 0.0f, 0.0f, 0.3f);
-  public Color COLOR_CURRENT_NODE = new Color(1.0f, 0.0f, 0.0f, 0.3f);
   public void OnChangeCurrentNode(PathFinder<RandomGraphNode>.PathFinderNode node)
   {
     Update_Vertex_Viz(node, COLOR_CURRENT_NODE);
