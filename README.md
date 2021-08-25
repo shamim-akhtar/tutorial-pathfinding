@@ -5,6 +5,9 @@
 
 In this tutorial, we will implement a generic pathfinder in Unity using C#. We will approach the tutorial from a basic 2D grid-based pathfinding to a more robust generic pathfinder that we can use for a graph-based data structure. We will then apply our pathfinder to a variety of pathfinding problems.
 
+## Try the WebGL Pathfining Playground
+[![Pathfinding Playground](https://github.com/shamim-akhtar/tutorial-pathfinding/blob/part-6-combined-demo/Pictures/Playground.jpg)](https://faramira.com/downloads/pathfinding-playground/)
+
 > ### 1. [Implement a Generic Pathfinder in Unity using C#](https://faramira.com/implement-a-generic-pathfinder-in-unity-using-csharp/)
 > 
 In this first tutorial, we create a generic pathfinder that is algorithm agnostic. Then we create three implementations of the pathfinder using the A*, Djikstra and Greedy best-first algorithm. We apply this generic pathfinder to various pathfinding problems (8-Puzzle, rectangular grid-based map and graph-based map).
