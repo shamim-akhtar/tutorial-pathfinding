@@ -11,6 +11,11 @@ namespace GameAI
       DJIKSTRA,
       GREEDY_BEST_FIRST,
     }
+    public enum CostFunctionType
+    {
+      MANHATTAN,
+      EUCLIDEN,
+    }
     // An enumeration type to represent the status of the 
     // pathfinder at any given time.
     public enum PathFinderStatus

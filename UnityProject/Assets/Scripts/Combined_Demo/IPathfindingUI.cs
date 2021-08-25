@@ -14,8 +14,11 @@ public interface IPathfindingUI
   void RandomizeNPCs();
   void RegenerateMap();
   void SetPathFinderType(GameAI.PathFinding.PathFinderTypes type);
+  void SetCostFunction(GameAI.PathFinding.CostFunctionType cf);
   void SetFCostText(Text textField);
   void SetHCostText(Text textField);
   void SetGCostText(Text textField);
   void SetNotificationText(Text textField);
+
+  bool IsInteractive();
 }

@@ -214,8 +214,7 @@ public class RandomGraphThreaded : MonoBehaviour
 
   void Update()
   {
-    if (Input.GetMouseButtonDown(1) ||
-      Input.GetMouseButtonDown(0))
+    if (Input.GetMouseButtonDown(1))
     {
       RayCastAndSetDestination();
     }
@@ -253,12 +252,12 @@ public class RandomGraphThreaded : MonoBehaviour
 
     RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0f);
 
-    // by default enable camera panning.
-    CameraMovement2D camMovement = Camera.main.gameObject.GetComponent<CameraMovement2D>();
-    if(camMovement)
-    {
-      CameraMovement2D.CameraPanning = true;
-    }
+    //// by default enable camera panning.
+    //CameraMovement2D camMovement = Camera.main.gameObject.GetComponent<CameraMovement2D>();
+    //if(camMovement)
+    //{
+    //  CameraMovement2D.CameraPanning = true;
+    //}
 
     if (hit)
     {
@@ -268,10 +267,10 @@ public class RandomGraphThreaded : MonoBehaviour
         mPathViz[i].positionCount = 0;
       }
 
-      if (camMovement)
-      {
-        CameraMovement2D.CameraPanning = false;
-      }
+      //if (camMovement)
+      //{
+      //  CameraMovement2D.CameraPanning = false;
+      //}
       // disable camera panning if
       GameObject obj = hit.transform.gameObject;
       RandomGraphNode_Viz sc = obj.GetComponent<RandomGraphNode_Viz>();

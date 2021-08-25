@@ -4,6 +4,7 @@ using UnityEngine;
 using GameAI.PathFinding;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
 {
@@ -46,8 +47,8 @@ public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
   // The start vertex.
   RectGrid.Cell mGoal;
 
-  ThreadedPathFinderPool<Vector2Int> mThreadedPool = 
-    new ThreadedPathFinderPool<Vector2Int>();
+  //ThreadedPathFinderPool<Vector2Int> mThreadedPool = 
+  //  new ThreadedPathFinderPool<Vector2Int>();
 
   Dictionary<PathFinderTypes, List<PathFinder<Vector2Int>>> mPathFinders =
     new Dictionary<PathFinderTypes, List<PathFinder<Vector2Int>>>();
@@ -64,10 +65,7 @@ public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
   // Construct a grid with the max cols and rows.
   protected void Construct(int numX, int numY)
   {
-    mX = numX;
-    mY = numY;
-
-    mGrid = new RectGrid(mY, mY);
+    mGrid = new RectGrid(mX, mY);
 
     mRectGridCellGameObjects = new GameObject[mX, mY];
 
@@ -170,26 +168,26 @@ public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
 
   void SyncThreads()
   {
-    if (!mInteractive)
-    {
-      for (int i = 0; i < NumNPC; ++i)
-      {
-        if (mThreadedPool.GetThreadedPathFinder(i).Done)
-        {
-          PathFinder<Vector2Int> pf = mThreadedPool.GetThreadedPathFinder(i).PathFinder;
-          mThreadedPool.GetThreadedPathFinder(i).Done = false;
+    //if (!mInteractive)
+    //{
+    //  for (int i = 0; i < NumNPC; ++i)
+    //  {
+    //    if (mThreadedPool.GetThreadedPathFinder(i).Done)
+    //    {
+    //      PathFinder<Vector2Int> pf = mThreadedPool.GetThreadedPathFinder(i).PathFinder;
+    //      mThreadedPool.GetThreadedPathFinder(i).Done = false;
 
-          if (pf.Status == PathFinderStatus.SUCCESS)
-          {
-            OnPathFound(i);
-          }
-          else if (pf.Status == PathFinderStatus.FAILURE)
-          {
-            OnPathNotFound(i);
-          }
-        }
-      }
-    }
+    //      if (pf.Status == PathFinderStatus.SUCCESS)
+    //      {
+    //        OnPathFound(i);
+    //      }
+    //      else if (pf.Status == PathFinderStatus.FAILURE)
+    //      {
+    //        OnPathNotFound(i);
+    //      }
+    //    }
+    //  }
+    //}
   }
 
   // toggling of walkable/non-walkable cells.
@@ -229,6 +227,12 @@ public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
 
   void RayCastAndSetDestination()
   {
+    // disable picking if we hit the UI.
+    if (EventSystem.current.IsPointerOverGameObject() || enabled == false)
+    {
+      return;
+    }
+
     Vector2 rayPos = new Vector2(
         Camera.main.ScreenToWorldPoint(Input.mousePosition).x,
         Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
@@ -261,10 +265,10 @@ public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
     mPathFinders.Add(PathFinderTypes.GREEDY_BEST_FIRST, new List<PathFinder<Vector2Int>>());
     for (int i = 0; i < NumNPC; ++i)
     {
-      // We create the different path finders
-      ThreadedPathFinder<Vector2Int> tpf = mThreadedPool.CreateThreadedAStarPathFinder();
-      tpf.PathFinder.HeuristicCost = RectGrid.GetManhattanCost;
-      tpf.PathFinder.NodeTraversalCost = RectGrid.GetEuclideanCost;
+      //// We create the different path finders
+      //ThreadedPathFinder<Vector2Int> tpf = mThreadedPool.CreateThreadedAStarPathFinder();
+      //tpf.PathFinder.HeuristicCost = RectGrid.GetManhattanCost;
+      //tpf.PathFinder.NodeTraversalCost = RectGrid.GetEuclideanCost;
 
       AStarPathFinder<Vector2Int> pf1 = new AStarPathFinder<Vector2Int>();
       DijkstraPathFinder<Vector2Int> pf2 = new DijkstraPathFinder<Vector2Int>();
@@ -287,7 +291,7 @@ public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
 
   public string GetTitle()
   {
-    return "2D Grid Based";
+    return "2D Grid";
   }
 
   public bool IsAnyPathFinderRunning()
@@ -380,7 +384,9 @@ public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
     {
       for (int i = 0; i < mNPCs.Count; ++i)
       {
-        mThreadedPool.FindPath(i, mNPCStartPositions[i], mGoal);
+        //mThreadedPool.FindPath(i, mNPCStartPositions[i], mGoal);
+        mPathFinders[mPathFinderType][i].Initialize(mNPCStartPositions[i], mGoal);
+        StartCoroutine(Coroutine_FindPathSteps(i));
       }
     }
     else
@@ -415,8 +421,9 @@ public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
 
     if (!mInteractive)
     {
-      ThreadedPathFinder<Vector2Int> tpf = mThreadedPool.GetThreadedPathFinder(index);
-      node = tpf.PathFinder.CurrentNode;
+      //ThreadedPathFinder<Vector2Int> tpf = mThreadedPool.GetThreadedPathFinder(index);
+      //node = tpf.PathFinder.CurrentNode;
+      node = mPathFinders[mPathFinderType][index].CurrentNode;
     }
     else
     {
@@ -598,6 +605,10 @@ public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
     GameObject obj = mRectGridCellGameObjects[x, y];
     RectGridCell_Viz sc = obj.GetComponent<RectGridCell_Viz>();
     sc.SetInnerColor(COLOR_CURRENT_NODE);
+
+    SetFCost(node.Fcost);
+    SetHCost(node.Hcost);
+    SetGCost(node.GCost);
   }
   public void OnAddToOpenList(PathFinder<Vector2Int>.PathFinderNode node)
   {
@@ -614,5 +625,66 @@ public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
     GameObject obj = mRectGridCellGameObjects[x, y];
     RectGridCell_Viz sc = obj.GetComponent<RectGridCell_Viz>();
     sc.SetInnerColor(COLOR_ADD_TO_CLOSED_LIST);
+  }
+
+
+  public bool IsInteractive()
+  {
+    return mInteractive;
+  }
+
+  public void SetCostFunction(CostFunctionType cf)
+  {
+    switch(cf)
+    {
+      case (CostFunctionType.MANHATTAN):
+        {
+          for (int i = 0; i < NumNPC; ++i)
+          {
+            //// We create the different path finders
+            //ThreadedPathFinder<Vector2Int> tpf = mThreadedPool.GetThreadedPathFinder(i);
+            //tpf.PathFinder.HeuristicCost = RectGrid.GetManhattanCost;
+            //tpf.PathFinder.NodeTraversalCost = RectGrid.GetEuclideanCost;
+
+            PathFinder<Vector2Int> pf1 = mPathFinders[PathFinderTypes.ASTAR][i];
+            PathFinder<Vector2Int> pf2 = mPathFinders[PathFinderTypes.DJIKSTRA][i];
+            PathFinder<Vector2Int> pf3 = mPathFinders[PathFinderTypes.GREEDY_BEST_FIRST][i];
+
+            pf1.HeuristicCost = RectGrid.GetManhattanCost;
+            pf1.NodeTraversalCost = RectGrid.GetEuclideanCost;
+            pf2.HeuristicCost = RectGrid.GetManhattanCost;
+            pf2.NodeTraversalCost = RectGrid.GetEuclideanCost;
+            pf3.HeuristicCost = RectGrid.GetManhattanCost;
+            pf3.NodeTraversalCost = RectGrid.GetEuclideanCost;
+
+            mPathCalculated.Add(false);
+          }
+          break;
+        }
+      case (CostFunctionType.EUCLIDEN):
+        {
+          for (int i = 0; i < NumNPC; ++i)
+          {
+            //// We create the different path finders
+            //ThreadedPathFinder<Vector2Int> tpf = mThreadedPool.GetThreadedPathFinder(i);
+            //tpf.PathFinder.HeuristicCost = RectGrid.GetEuclideanCost;
+            //tpf.PathFinder.NodeTraversalCost = RectGrid.GetEuclideanCost;
+
+            PathFinder<Vector2Int> pf1 = mPathFinders[PathFinderTypes.ASTAR][i];
+            PathFinder<Vector2Int> pf2 = mPathFinders[PathFinderTypes.DJIKSTRA][i];
+            PathFinder<Vector2Int> pf3 = mPathFinders[PathFinderTypes.GREEDY_BEST_FIRST][i];
+
+            pf1.HeuristicCost = RectGrid.GetEuclideanCost;
+            pf1.NodeTraversalCost = RectGrid.GetEuclideanCost;
+            pf2.HeuristicCost = RectGrid.GetEuclideanCost;
+            pf2.NodeTraversalCost = RectGrid.GetEuclideanCost;
+            pf3.HeuristicCost = RectGrid.GetEuclideanCost;
+            pf3.NodeTraversalCost = RectGrid.GetEuclideanCost;
+
+            mPathCalculated.Add(false);
+          }
+          break;
+        }
+    }
   }
 }

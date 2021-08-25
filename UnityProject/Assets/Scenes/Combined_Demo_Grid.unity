@@ -207,7 +207,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1771781065}
-        m_TargetAssemblyTypeName: UI, Assembly-CSharp
+        m_TargetAssemblyTypeName: UI_Common, Assembly-CSharp
         m_MethodName: OnClickBtn_Reset
         m_Mode: 1
         m_Arguments:
@@ -736,7 +736,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1771781065}
-        m_TargetAssemblyTypeName: UI, Assembly-CSharp
+        m_TargetAssemblyTypeName: UI_Common, Assembly-CSharp
         m_MethodName: SetToggleInteractive
         m_Mode: 1
         m_Arguments:
@@ -884,7 +884,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &92725324
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1439,7 +1439,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1771781065}
-        m_TargetAssemblyTypeName: UI, Assembly-CSharp
+        m_TargetAssemblyTypeName: UI_Common, Assembly-CSharp
         m_MethodName: OnClickBtn_Play
         m_Mode: 1
         m_Arguments:
@@ -1815,7 +1815,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1771781065}
-        m_TargetAssemblyTypeName: UI, Assembly-CSharp
+        m_TargetAssemblyTypeName: UI_Common, Assembly-CSharp
         m_MethodName: SetToggleCostFunction
         m_Mode: 1
         m_Arguments:
@@ -2657,7 +2657,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1771781065}
-        m_TargetAssemblyTypeName: UI, Assembly-CSharp
+        m_TargetAssemblyTypeName: UI_Common, Assembly-CSharp
         m_MethodName: OnClickBtn_Graph
         m_Mode: 1
         m_Arguments:
@@ -3027,7 +3027,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &392104656
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3367,7 +3367,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Randomize Graph
+  m_Text: Randomize Map
 --- !u!222 &441782571
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3992,7 +3992,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1771781065}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UI, Assembly-CSharp
         m_MethodName: SetToggleMode
         m_Mode: 1
@@ -4138,88 +4138,6 @@ MonoBehaviour:
   onChangedState:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &732289611
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 732289612}
-  - component: {fileID: 732289613}
-  m_Layer: 0
-  m_Name: Circle2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &732289612
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 732289611}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1265389166}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &732289613
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 732289611}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  m_Color: {r: 0.5650572, g: 0.8301887, b: 0.13705944, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &791118026
 GameObject:
   m_ObjectHideFlags: 0
@@ -4428,7 +4346,7 @@ GameObject:
   - component: {fileID: 835121883}
   - component: {fileID: 835121884}
   m_Layer: 0
-  m_Name: DemoGraph
+  m_Name: DemoGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4457,25 +4375,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 835121882}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad705402fea4fcc40ab30548aed43e0a, type: 3}
+  m_Script: {fileID: 11500000, guid: 41890a19975a28849974db62fcc0b067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VertexPrefab: {fileID: 5360448224127608593, guid: 92641e196c37b354580d7b4fc4fb2038, type: 3}
+  mX: 30
+  mY: 20
+  RectGridCell_Prefab: {fileID: 913326765648974980, guid: 87ed6faea8ce15c47a91dab55137e5be, type: 3}
+  COLOR_WALKABLE: {r: 0.16470589, g: 0.3882353, b: 0.6431373, a: 1}
+  COLOR_NON_WALKABLE: {r: 0, g: 0, b: 0, a: 1}
+  COLOR_CURRENT_NODE: {r: 0.5, g: 0.4, b: 0.1, a: 1}
+  COLOR_ADD_TO_OPEN_LIST: {r: 0.2, g: 0.7, b: 0.5, a: 1}
+  COLOR_ADD_TO_CLOSED_LIST: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  mDestination: {fileID: 1265389166}
   NpcPrefab: {fileID: 8572495700374421097, guid: 80fdf5b28b182d24ba825ed3b07e9401, type: 3}
   NumNPC: 1
-  Destination: {fileID: 1265389166}
-  StatusText: {fileID: 117743483}
-  rows_cols: 30
-  rows_rows: 20
-  NodeSelectionProb: 0.6
-  UseThreads: 1
-  mTextFCost: {fileID: 445311857}
-  mTextGCost: {fileID: 92316641}
-  mTextHCost: {fileID: 975854971}
-  COLOR_DEFAULT: {r: 1, g: 1, b: 0, a: 1}
-  COLOR_OPEN_LIST: {r: 0.09104663, g: 0.09104663, b: 0.6226415, a: 0.9019608}
-  COLOR_CLOSED_LIST: {r: 0, g: 0, b: 0, a: 0.3}
-  COLOR_CURRENT_NODE: {r: 1, g: 0, b: 0, a: 0.8666667}
   mPathFinderType: 0
   mInteractive: 0
 --- !u!1 &845542577
@@ -4719,11 +4632,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11438438, guid: 298daca7decb9f846b5ff996ee97a495, type: 3}
       propertyPath: m_Text
-      value: Click on the two buttons on the top left to see Pathfinding on a 2D
-        grid and a graph. Click on any vertex to see pathfinding in action. You can
-        <color=yellow>change the pathfinding algorithm, the cost function and make
-        the pathfinding interactive</color> by stepping through the entire pathfinding
-        search.
+      value: "Click on the two buttons on the top left to see Pathfinding on a 2D
+        grid and a graph. Left-click to toggle a cell between walkable and non-walkable.
+        Right-click to see Pathfinding.\r You can <color=yellow>change the pathfinding
+        algorithm, the cost function and make the pathfinding interactive</color>
+        by stepping through the entire pathfinding search."
       objectReference: {fileID: 0}
     - target: {fileID: 11438438, guid: 298daca7decb9f846b5ff996ee97a495, type: 3}
       propertyPath: m_FontData.m_MinSize
@@ -4843,7 +4756,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114088067885285624, guid: 298daca7decb9f846b5ff996ee97a495, type: 3}
       propertyPath: m_Padding.m_Top
-      value: 30
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 114088067885285624, guid: 298daca7decb9f846b5ff996ee97a495, type: 3}
       propertyPath: m_Padding.m_Bottom
@@ -4896,6 +4809,14 @@ PrefabInstance:
     - target: {fileID: 2519421632901104655, guid: 298daca7decb9f846b5ff996ee97a495, type: 3}
       propertyPath: m_FontData.m_FontSize
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3937273369302575592, guid: 298daca7decb9f846b5ff996ee97a495, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3937273369302575592, guid: 298daca7decb9f846b5ff996ee97a495, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3957215460353187139, guid: 298daca7decb9f846b5ff996ee97a495, type: 3}
       propertyPath: m_RootOrder
@@ -5731,7 +5652,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1771781065}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UI, Assembly-CSharp
         m_MethodName: OnClickBtn_8Puzzle
         m_Mode: 1
@@ -6262,7 +6183,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1771781065}
-        m_TargetAssemblyTypeName: UI_Graph, Assembly-CSharp
+        m_TargetAssemblyTypeName: UI_Common, Assembly-CSharp
         m_MethodName: OnClickBtn_RandomizeGraph
         m_Mode: 1
         m_Arguments:
@@ -6388,38 +6309,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1261337953}
   m_CullTransparentMesh: 1
---- !u!1 &1265389165
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1265389166}
-  m_Layer: 0
-  m_Name: Destination
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1265389166
+--- !u!4 &1265389166 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+  m_PrefabInstance: {fileID: 1807882448017669293}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1265389165}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1796488107}
-  - {fileID: 732289612}
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1285665437
 GameObject:
   m_ObjectHideFlags: 0
@@ -6842,7 +6736,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1771781065}
-        m_TargetAssemblyTypeName: UI, Assembly-CSharp
+        m_TargetAssemblyTypeName: UI_Common, Assembly-CSharp
         m_MethodName: OnSelectAlgorithm
         m_Mode: 1
         m_Arguments:
@@ -6937,7 +6831,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1771781065}
-        m_TargetAssemblyTypeName: UI, Assembly-CSharp
+        m_TargetAssemblyTypeName: UI_Common, Assembly-CSharp
         m_MethodName: OnClickBtn_Next
         m_Mode: 1
         m_Arguments:
@@ -7085,7 +6979,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1771781065}
-        m_TargetAssemblyTypeName: UI, Assembly-CSharp
+        m_TargetAssemblyTypeName: UI_Common, Assembly-CSharp
         m_MethodName: OnClickBtn_Grid
         m_Mode: 1
         m_Arguments:
@@ -8611,7 +8505,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1771781063}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 495cbcd78319d894a883eb9488e1f2cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 7791deb8836c5dd4b996a9a798e42708, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mDemo: {fileID: 835121884}
@@ -8631,90 +8525,11 @@ MonoBehaviour:
   mBtnGrid: {fileID: 1453853757}
   mBtnGraph: {fileID: 267519318}
   mBtnRandomizeNPC: {fileID: 2040757082}
+  mTextFCost: {fileID: 445311857}
+  mTextGCost: {fileID: 92316641}
+  mTextHCost: {fileID: 975854971}
   mNotification: {fileID: 901131300}
   mTextNotification: {fileID: 117743483}
---- !u!1 &1796488106
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1796488107}
-  - component: {fileID: 1796488108}
-  m_Layer: 0
-  m_Name: Circle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1796488107
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1796488106}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1265389166}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1796488108
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1796488106}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  m_Color: {r: 0.6037736, g: 0.042719822, b: 0.042719822, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &1855414402
 GameObject:
   m_ObjectHideFlags: 0
@@ -9880,7 +9695,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1771781065}
-        m_TargetAssemblyTypeName: UI, Assembly-CSharp
+        m_TargetAssemblyTypeName: UI_Common, Assembly-CSharp
         m_MethodName: OnClickBtn_RandomizeNPC
         m_Mode: 1
         m_Arguments:
@@ -10267,3 +10082,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2122130392}
   m_CullTransparentMesh: 0
+--- !u!1001 &1807882448017669293
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1807882449241109184, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_Name
+      value: Destination
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807882449241109187, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fc67fa91d4ea3084fb259733ce0c3d7b, type: 3}

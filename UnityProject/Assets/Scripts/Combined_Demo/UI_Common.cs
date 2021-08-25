@@ -2,20 +2,20 @@ using Lean.Gui;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using GameAI.PathFinding;
 
-public class UI_Graph : MonoBehaviour
+public class UI_Common : MonoBehaviour
 {
-  public RandomGraph mDemo;
+  public RectGrid_Viz mDemo;
 
   public Text TitleText;
   public LeanSwitch mSwitchAlgo;
   public Text mAlgoText;
   public LeanToggle mToggleCostFunction;
   public Text mCostFunctionText;
-  CostFunctionType mCostFunctionType = CostFunctionType.MANHATTAN;
+  GameAI.PathFinding.CostFunctionType mCostFunctionType = GameAI.PathFinding.CostFunctionType.MANHATTAN;
 
   public LeanToggle mToggleMode;
   public Text mToggleModeText;
@@ -43,9 +43,9 @@ public class UI_Graph : MonoBehaviour
   public Button mBtnGraph;
   public Button mBtnRandomizeNPC;
 
-  //public Text mTextFCost;
-  //public Text mTextGCost;
-  //public Text mTextHCost;
+  public Text mTextFCost;
+  public Text mTextGCost;
+  public Text mTextHCost;
   public GameObject mNotification;
   public Text mTextNotification;
 
@@ -54,7 +54,11 @@ public class UI_Graph : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
-    SetTitle("Pathdinding Playground - Graphs");
+    SetTitle("Pathdinding Playground - " + mDemo.GetTitle());
+    mDemo.SetFCostText(mTextFCost);
+    mDemo.SetGCostText(mTextGCost);
+    mDemo.SetHCostText(mTextHCost);
+    mDemo.SetNotificationText(mTextNotification);
   }
 
   // Update is called once per frame
@@ -151,7 +155,7 @@ public class UI_Graph : MonoBehaviour
 
   public void OnClickBtn_Play()
   {
-    mDemo.PathFindingStepForcComplete();
+    mDemo.PathFindingStepForceComplete();
   }
 
   public void OnClickBtn_Next()
@@ -181,7 +185,7 @@ public class UI_Graph : MonoBehaviour
 
   public void OnClickBtn_RandomizeGraph()
   {
-    mDemo.OnClickRegenerate();
+    mDemo.RegenerateMap();
   }
 
   public void OnSelectAlgorithm()
@@ -193,7 +197,7 @@ public class UI_Graph : MonoBehaviour
       return;
     }
 
-    //if(!mDemo.mInteractive)
+    //if(!mDemo.IsInteractive())
     //{
     //  mSwitchAlgo.State = (int)mPathFindingAlgo;
     //  ShowNotification("Toggle to interactive mode to switch pathfinder algorithm. Non interactive mode uses the AStar pathfinder using threads.");
@@ -204,19 +208,19 @@ public class UI_Graph : MonoBehaviour
     {
       mAlgoText.text = "Astar";
       mAlgoText.alignment = TextAnchor.MiddleLeft;
-      mDemo.mPathFinderType = GameAI.PathFinding.PathFinderTypes.ASTAR;
+      mDemo.SetPathFinderType(GameAI.PathFinding.PathFinderTypes.ASTAR);
     }
     if (mPathFindingAlgo == 1)
     {
       mAlgoText.text = "Dijkstra";
       mAlgoText.alignment = TextAnchor.MiddleCenter;
-      mDemo.mPathFinderType = GameAI.PathFinding.PathFinderTypes.DJIKSTRA;
+      mDemo.SetPathFinderType(GameAI.PathFinding.PathFinderTypes.DJIKSTRA);
     }
     if (mPathFindingAlgo == 2)
     {
       mAlgoText.text = "Greedy Best-First";
       mAlgoText.alignment = TextAnchor.MiddleRight;
-      mDemo.mPathFinderType = GameAI.PathFinding.PathFinderTypes.GREEDY_BEST_FIRST;
+      mDemo.SetPathFinderType(GameAI.PathFinding.PathFinderTypes.GREEDY_BEST_FIRST);
     }
   }
 

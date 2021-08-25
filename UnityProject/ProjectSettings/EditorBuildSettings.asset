@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Combined_Demo_Graph.unity
     guid: 68337c7952dea1a4d8fc8801a127cb1c
+  - enabled: 1
+    path: Assets/Scenes/Combined_Demo_Grid.unity
+    guid: 59935bf4560106145b49555b64e800fa
   m_configObjects: {}
