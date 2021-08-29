@@ -23,7 +23,6 @@ public class RandomGraph : MonoBehaviour
   [SerializeField]
   Transform Destination;
 
-  [SerializeField]
   Text StatusText;
 
   public int rows_cols = 20;
@@ -31,9 +30,9 @@ public class RandomGraph : MonoBehaviour
   public float NodeSelectionProb = 0.6f;
   //public bool UseThreads = false;
 
-  public Text mTextFCost;
-  public Text mTextGCost;
-  public Text mTextHCost;
+  private Text mTextFCost;
+  private Text mTextGCost;
+  private Text mTextHCost;
 
   public Color COLOR_DEFAULT = new Color(1.0f, 1.0f, 0.0f, 1.0f);
   public Color COLOR_OPEN_LIST = new Color(0.0f, 0.0f, 1.0f, 0.3f);
@@ -667,5 +666,29 @@ public class RandomGraph : MonoBehaviour
     }
     FindPath();
   }
-  
+
+  public void SetFCostText(Text txt)
+  {
+    mTextFCost = txt;
+  }
+
+  public void SetGCostText(Text txt)
+  {
+    mTextGCost = txt;
+  }
+
+  public void SetHCostText(Text txt)
+  {
+    mTextHCost = txt;
+  }
+
+  public void SetNotificationText(Text txt)
+  {
+    StatusText = txt;
+  }
+
+  public string GetTitle()
+  {
+    return "Graph";
+  }
 }

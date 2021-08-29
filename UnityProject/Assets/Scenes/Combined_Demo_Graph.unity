@@ -1267,7 +1267,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Cannot find path to destination
+  m_Text: 
 --- !u!222 &117743484
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4464,14 +4464,9 @@ MonoBehaviour:
   NpcPrefab: {fileID: 8572495700374421097, guid: 80fdf5b28b182d24ba825ed3b07e9401, type: 3}
   NumNPC: 1
   Destination: {fileID: 1265389166}
-  StatusText: {fileID: 117743483}
   rows_cols: 30
   rows_rows: 20
   NodeSelectionProb: 0.6
-  UseThreads: 1
-  mTextFCost: {fileID: 445311857}
-  mTextGCost: {fileID: 92316641}
-  mTextHCost: {fileID: 975854971}
   COLOR_DEFAULT: {r: 1, g: 1, b: 0, a: 1}
   COLOR_OPEN_LIST: {r: 0.09104663, g: 0.09104663, b: 0.6226415, a: 0.9019608}
   COLOR_CLOSED_LIST: {r: 0, g: 0, b: 0, a: 0.3}
@@ -5007,7 +5002,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &901131301
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8631,6 +8626,9 @@ MonoBehaviour:
   mBtnGrid: {fileID: 1453853757}
   mBtnGraph: {fileID: 267519318}
   mBtnRandomizeNPC: {fileID: 2040757082}
+  mTextFCost: {fileID: 445311857}
+  mTextGCost: {fileID: 92316641}
+  mTextHCost: {fileID: 975854971}
   mNotification: {fileID: 901131300}
   mTextNotification: {fileID: 117743483}
 --- !u!1 &1796488106

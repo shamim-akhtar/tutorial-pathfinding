@@ -43,9 +43,9 @@ public class UI_Graph : MonoBehaviour
   public Button mBtnGraph;
   public Button mBtnRandomizeNPC;
 
-  //public Text mTextFCost;
-  //public Text mTextGCost;
-  //public Text mTextHCost;
+  public Text mTextFCost;
+  public Text mTextGCost;
+  public Text mTextHCost;
   public GameObject mNotification;
   public Text mTextNotification;
 
@@ -54,7 +54,11 @@ public class UI_Graph : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
-    SetTitle("Pathdinding Playground - Graphs");
+    SetTitle("Pathdinding Playground - " + mDemo.GetTitle());
+    mDemo.SetFCostText(mTextFCost);
+    mDemo.SetGCostText(mTextGCost);
+    mDemo.SetHCostText(mTextHCost);
+    mDemo.SetNotificationText(mTextNotification);
   }
 
   // Update is called once per frame
