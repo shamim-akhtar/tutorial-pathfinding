@@ -417,6 +417,10 @@ public class RectGrid_Viz : MonoBehaviour, IPathfindingUI
   }
   public void OnPathFound(int index)
   {
+    if (mTextNotification)
+    {
+      mTextNotification.text = "Found path to destination";
+    }
     PathFinder<Vector2Int>.PathFinderNode node = null;
 
     if (!mInteractive)
