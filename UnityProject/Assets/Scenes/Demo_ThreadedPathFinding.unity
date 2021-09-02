@@ -344,7 +344,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 439900538}
-  - component: {fileID: 439900537}
   m_Layer: 0
   m_Name: Destination
   m_TagString: Untagged
@@ -352,19 +351,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &439900537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 439900536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e5a492fa13f5654d89d190206c66f73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Speed: 1
 --- !u!4 &439900538
 Transform:
   m_ObjectHideFlags: 0
@@ -972,10 +958,16 @@ MonoBehaviour:
   NpcPrefab: {fileID: 8572495700374421097, guid: 80fdf5b28b182d24ba825ed3b07e9401, type: 3}
   NumNPC: 50
   Destination: {fileID: 439900538}
-  StatusText: {fileID: 276019147}
   rows_cols: 20
   rows_rows: 10
   NodeSelectionProb: 0.5
+  UseThreads: 1
+  COLOR_DEFAULT: {r: 1, g: 1, b: 0, a: 1}
+  COLOR_OPEN_LIST: {r: 0, g: 0, b: 1, a: 0.3}
+  COLOR_CLOSED_LIST: {r: 0, g: 0, b: 0, a: 0.3}
+  COLOR_CURRENT_NODE: {r: 1, g: 0, b: 0, a: 0.3}
+  mPathFinderType: 0
+  mInteractive: 0
 --- !u!1 &1978456339
 GameObject:
   m_ObjectHideFlags: 0

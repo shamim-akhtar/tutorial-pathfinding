@@ -4462,11 +4462,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VertexPrefab: {fileID: 5360448224127608593, guid: 92641e196c37b354580d7b4fc4fb2038, type: 3}
   NpcPrefab: {fileID: 8572495700374421097, guid: 80fdf5b28b182d24ba825ed3b07e9401, type: 3}
-  NumNPC: 1
+  NumNPC: 50
   Destination: {fileID: 1265389166}
   rows_cols: 30
   rows_rows: 20
   NodeSelectionProb: 0.6
+  UseThreads: 0
   COLOR_DEFAULT: {r: 1, g: 1, b: 0, a: 1}
   COLOR_OPEN_LIST: {r: 0.09104663, g: 0.09104663, b: 0.6226415, a: 0.9019608}
   COLOR_CLOSED_LIST: {r: 0, g: 0, b: 0, a: 0.3}
