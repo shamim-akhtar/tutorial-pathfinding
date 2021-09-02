@@ -531,6 +531,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 601713819}
   m_CullTransparentMesh: 1
+--- !u!114 &836812579 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 406800696670703934, guid: 80fdf5b28b182d24ba825ed3b07e9401, type: 3}
+  m_PrefabInstance: {fileID: 8572495701136009868}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2757dbccc22bbe46a3942a4da075418, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1174356645
 GameObject:
   m_ObjectHideFlags: 0
@@ -790,17 +801,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1940329702 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8572495700374421098, guid: 80fdf5b28b182d24ba825ed3b07e9401, type: 3}
-  m_PrefabInstance: {fileID: 8572495701136009868}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2757dbccc22bbe46a3942a4da075418, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2036018263
 GameObject:
   m_ObjectHideFlags: 0
@@ -845,7 +845,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VertexPrefab: {fileID: 5360448224127608593, guid: 92641e196c37b354580d7b4fc4fb2038, type: 3}
-  Npc: {fileID: 1940329702}
+  Npc: {fileID: 836812579}
   Destination: {fileID: 1238408638}
   StatusText: {fileID: 202871463}
 --- !u!1001 &8572495701136009868

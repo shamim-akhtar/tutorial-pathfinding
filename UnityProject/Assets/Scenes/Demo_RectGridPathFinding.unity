@@ -278,7 +278,7 @@ MonoBehaviour:
   NpcPrefab: {fileID: 8572495700374421097, guid: 80fdf5b28b182d24ba825ed3b07e9401, type: 3}
   NumNPC: 1
   mPathFinderType: 0
-  mInteractive: 1
+  mInteractive: 0
 --- !u!4 &936515233
 Transform:
   m_ObjectHideFlags: 0
