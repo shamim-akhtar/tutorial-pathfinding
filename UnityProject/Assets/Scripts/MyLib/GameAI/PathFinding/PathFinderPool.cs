@@ -65,7 +65,7 @@ public class ThreadedPathFinderPool<T>
     Node<T> start,
     Node<T> goal)
   {
-    tpf.PathFinder.Initialize(start, goal);
+    tpf.PathFinder.Initialise(start, goal);
     ThreadStart starter = tpf.Execute;
     Thread thread = new Thread(starter);
     thread.IsBackground = true;

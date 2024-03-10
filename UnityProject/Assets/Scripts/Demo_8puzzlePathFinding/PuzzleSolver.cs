@@ -31,7 +31,7 @@ public class PuzzleSolver : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             mPuzzleStateViz.SetPuzzleState(mCurrentState.Value);
-            mAstarSolver.Initialize(mCurrentState, mGoalState);
+            mAstarSolver.Initialise(mCurrentState, mGoalState);
 
             Solve();
         }

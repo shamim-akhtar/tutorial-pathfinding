@@ -55,7 +55,7 @@ public class NPCMovement : MonoBehaviour
     //mPathFinder.onChangeCurrentNode = map.OnChangeCurrentNode;
     map.ResetCellColours();
 
-    mPathFinder.Initialize(start, destination);
+    mPathFinder.Initialise(start, destination);
     StartCoroutine(Coroutine_FindPathSteps());
   }
 

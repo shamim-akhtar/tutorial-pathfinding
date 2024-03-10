@@ -219,7 +219,7 @@ public class BusStopGraph : MonoBehaviour
       Destination.gameObject.SetActive(true);
 
       mGoal = sc.Vertex;
-      mPathFinder.Initialize(mStart, mGoal);
+      mPathFinder.Initialise(mStart, mGoal);
       StartCoroutine(Coroutine_FindPathSteps());
     }
   }

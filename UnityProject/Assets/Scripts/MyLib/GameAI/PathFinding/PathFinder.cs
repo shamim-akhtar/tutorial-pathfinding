@@ -9,13 +9,13 @@ namespace GameAI
     // pathfinder at any given time.
     public enum PathFinderStatus
     {
-      NOT_INITIALIZED,
+      NOT_INITIALISED,
       SUCCESS,
       FAILURE,
       RUNNING,
     }
 
-    // The Noce class. 
+    // The Node class. 
     // It is an abstract class that provides the base class
     // for any type of vertex that you want to implement in
     // your path finding problem.
@@ -103,7 +103,7 @@ namespace GameAI
       #region Properties
 
       // Add a property that holds the current status of the
-      // pathfinder. By default it is set to NOT_INITIALIZED.
+      // pathfinder. By default it is set to NOT_INITIALISED.
       // Also note that we have made the set to private to 
       // ensure that only this class can change and set
       // the status.
@@ -111,7 +111,7 @@ namespace GameAI
       {
         get;
         private set;
-      } = PathFinderStatus.NOT_INITIALIZED;
+      } = PathFinderStatus.NOT_INITIALISED;
 
       // Add properties for the start and goal nodes.
       public Node<T> Start { get; private set; }
@@ -125,10 +125,10 @@ namespace GameAI
 
       #region Open and Closed lists and associated functions
       // The open list for the path finder.
-      protected List<PathFinderNode> mOpenList = new List<PathFinderNode>();
+      protected List<PathFinderNode> openList = new List<PathFinderNode>();
 
       // The closed list
-      protected List<PathFinderNode> mClosedList = new List<PathFinderNode>();
+      protected List<PathFinderNode> closedList = new List<PathFinderNode>();
 
       // A helper method to find the least cost node from a list
       protected PathFinderNode GetLeastCostNode(List<PathFinderNode> myList)
@@ -185,7 +185,7 @@ namespace GameAI
       // Initialize a new search.
       // Note that a search can only be initialized if 
       // the path finder is not already running.
-      public bool Initialize(Node<T> start, Node<T> goal)
+      public bool Initialise(Node<T> start, Node<T> goal)
       {
         if (Status == PathFinderStatus.RUNNING)
         {
@@ -207,8 +207,8 @@ namespace GameAI
         PathFinderNode root = new PathFinderNode(Start, null, 0f, H);
 
         // add this root node to our open list.
-        mOpenList.Add(root);
-        //mOpenList.Enqueue(root);
+        openList.Add(root);
+        //openList.Enqueue(root);
 
         // set the current node to root node.
         CurrentNode = root;
@@ -229,12 +229,12 @@ namespace GameAI
       public PathFinderStatus Step()
       {
         // Add the current node to the closed list.
-        mClosedList.Add(CurrentNode);
+        closedList.Add(CurrentNode);
 
         // Call the delegate to inform any subscribers.
         onAddToClosedList?.Invoke(CurrentNode);
 
-        if (mOpenList.Count == 0)
+        if (openList.Count == 0)
         {
           // we have exhausted our search. No solution is found.
           Status = PathFinderStatus.FAILURE;
@@ -244,14 +244,14 @@ namespace GameAI
 
         // Get the least cost element from the open list. 
         // This becomes our new current node.
-        CurrentNode = GetLeastCostNode(mOpenList);
-        //CurrentNode = mOpenList.Dequeue();
+        CurrentNode = GetLeastCostNode(openList);
+        //CurrentNode = openList.Dequeue();
 
         // Call the delegate to inform any subscribers.
         onChangeCurrentNode?.Invoke(CurrentNode);
 
         // Remove the node from the open list.
-        mOpenList.Remove(CurrentNode);
+        openList.Remove(CurrentNode);
 
         // Check if the node contains the Goal cell.
         if (EqualityComparer<T>.Default.Equals(
@@ -290,10 +290,10 @@ namespace GameAI
 
         CurrentNode = null;
 
-        mOpenList.Clear();
-        mClosedList.Clear();
+        openList.Clear();
+        closedList.Clear();
 
-        Status = PathFinderStatus.NOT_INITIALIZED;
+        Status = PathFinderStatus.NOT_INITIALISED;
       }
 
       #endregion
@@ -307,7 +307,7 @@ namespace GameAI
       {
         // first of all check if the node is already in the closedlist.
         // if so then we do not need to continue search for this node.
-        if (IsInList(mClosedList, cell.Value) == -1)
+        if (IsInList(closedList, cell.Value) == -1)
         {
           // The cell does not exist in the closed list.
 
@@ -324,27 +324,27 @@ namespace GameAI
           float H = HeuristicCost(cell.Value, Goal.Value);
 
           // Check if the cell is already there in the open list.
-          int idOList = IsInList(mOpenList, cell.Value);
+          int idOList = IsInList(openList, cell.Value);
           if (idOList == -1)
           {
             // The cell does not exist in the open list.
             // We will add the cell to the open list.
 
             PathFinderNode n = new PathFinderNode(cell, CurrentNode, G, H);
-            mOpenList.Add(n);
+            openList.Add(n);
             onAddToOpenList?.Invoke(n);
           }
           else
           {
             // if the cell exists in the openlist then check if the G cost 
             // is less than the one already in the list.
-            float oldG = mOpenList[idOList].GCost;
+            float oldG = openList[idOList].GCost;
             if (G < oldG)
             {
               // change the parent and update the cost to the new G
-              mOpenList[idOList].Parent = CurrentNode;
-              mOpenList[idOList].SetGCost(G);
-              onAddToOpenList?.Invoke(mOpenList[idOList]);
+              openList[idOList].Parent = CurrentNode;
+              openList[idOList].SetGCost(G);
+              onAddToOpenList?.Invoke(openList[idOList]);
             }
           }
         }
@@ -357,7 +357,7 @@ namespace GameAI
     {
       protected override void AlgorithmSpecificImplementation(Node<T> cell)
       {
-        if (IsInList(mClosedList, cell.Value) == -1)
+        if (IsInList(closedList, cell.Value) == -1)
         {
           float G = CurrentNode.GCost + NodeTraversalCost(
               CurrentNode.Location.Value, cell.Value);
@@ -366,27 +366,27 @@ namespace GameAI
           float H = 0.0f;
 
           // Check if the cell is already there in the open list.
-          int idOList = IsInList(mOpenList, cell.Value);
+          int idOList = IsInList(openList, cell.Value);
           if (idOList == -1)
           {
             // The cell does not exist in the open list.
             // We will add the cell to the open list.
 
             PathFinderNode n = new PathFinderNode(cell, CurrentNode, G, H);
-            mOpenList.Add(n);
+            openList.Add(n);
             onAddToOpenList?.Invoke(n);
           }
           else
           {
             // if the cell exists in the openlist then check if the G cost is less than the 
             // one already in the list.
-            float oldG = mOpenList[idOList].GCost;
+            float oldG = openList[idOList].GCost;
             if (G < oldG)
             {
               // change the parent and update the cost to the new G
-              mOpenList[idOList].Parent = CurrentNode;
-              mOpenList[idOList].SetGCost(G);
-              onAddToOpenList?.Invoke(mOpenList[idOList]);
+              openList[idOList].Parent = CurrentNode;
+              openList[idOList].SetGCost(G);
+              onAddToOpenList?.Invoke(openList[idOList]);
             }
           }
         }
@@ -399,34 +399,34 @@ namespace GameAI
     {
       protected override void AlgorithmSpecificImplementation(Node<T> cell)
       {
-        if (IsInList(mClosedList, cell.Value) == -1)
+        if (IsInList(closedList, cell.Value) == -1)
         {
           //Greedy best-first does doesn't include the G cost
           float G = 0.0f;
           float H = HeuristicCost(cell.Value, Goal.Value);
 
           // Check if the cell is already there in the open list.
-          int idOList = IsInList(mOpenList, cell.Value);
+          int idOList = IsInList(openList, cell.Value);
           if (idOList == -1)
           {
             // The cell does not exist in the open list.
             // We will add the cell to the open list.
 
             PathFinderNode n = new PathFinderNode(cell, CurrentNode, G, H);
-            mOpenList.Add(n);
+            openList.Add(n);
             onAddToOpenList?.Invoke(n);
           }
           else
           {
             // if the cell exists in the openlist then check if the G cost is less than the 
             // one already in the list.
-            float oldG = mOpenList[idOList].GCost;
+            float oldG = openList[idOList].GCost;
             if (G < oldG)
             {
               // change the parent and update the cost to the new G
-              mOpenList[idOList].Parent = CurrentNode;
-              mOpenList[idOList].SetGCost(G);
-              onAddToOpenList?.Invoke(mOpenList[idOList]);
+              openList[idOList].Parent = CurrentNode;
+              openList[idOList].SetGCost(G);
+              onAddToOpenList?.Invoke(openList[idOList]);
             }
           }
         }
