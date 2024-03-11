@@ -1,8 +1,8 @@
 # Generic Pathfinder in Unity using C#
 
-![Unity](https://img.shields.io/badge/Unity-2020.3.5f1-green) ![C#](https://img.shields.io/badge/%20-C%23-blue) ![Visitors](https://visitor-badge.glitch.me/badge?page_id=tutorial-pathfinding.visitor-badge)  
+![Unity](https://img.shields.io/badge/Unity-2020.3.5f1-green) ![C#](https://img.shields.io/badge/%20-C%23-blue)
 
-![Generic Pathfinder in Unity using C#](https://github.com/shamim-akhtar/tutorial-pathfinding/blob/main/Pictures/screenshot2_PathFinding.jpg)
+![Generic Pathfinder in Unity using C#](Pictures/screenshot2_PathFinding.jpg)
 
 
 In this tutorial, we will implement a generic pathfinder in Unity using C#. We will approach the tutorial from a basic 2D grid-based pathfinding to a more robust generic pathfinder that we can use for a graph-based data structure. We will then apply our pathfinder to a variety of pathfinding problems.
@@ -18,7 +18,7 @@ In this first tutorial, we create a generic pathfinder that is algorithm agnosti
 >
 In the second tutorial, we apply our generic pathfinder and solve the 8-puzzle problem and demonstrate the application in Unity.
 
-![8-Puzzle](https://github.com/shamim-akhtar/tutorial-pathfinding/blob/main/Pictures/8-Puzzle.jpg)
+![8-Puzzle](Pictures/8-Puzzle.jpg)
 
 > ### 3. [2D Grid-Based Pathfinding Using C# and Unity](https://faramira.com/2d-grid-based-pathfinding-using-c-and-unity/)
 
