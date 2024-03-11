@@ -1,6 +1,6 @@
 # Generic Pathfinder in Unity using C#
 
-![Unity](https://img.shields.io/badge/Unity-2020.3.5f1-green) ![C#](https://img.shields.io/badge/%20-C%23-blue) ![Visitors](https://visitor-badge.glitch.me/badge?page_id=tutorial-pathfinding.visitor-badge)  
+![Unity](https://img.shields.io/badge/Unity-2022.3.2f1-green) ![C#](https://img.shields.io/badge/%20-C%23-blue)
 
 ![Generic Pathfinder in Unity using C#](https://github.com/shamim-akhtar/tutorial-pathfinding/blob/main/Pictures/screenshot2_PathFinding.jpg)
 
