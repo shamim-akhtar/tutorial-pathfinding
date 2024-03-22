@@ -147,7 +147,7 @@ namespace PathFinding
     public delegate void DelegatePathFinderNode(PathFinderNode node);
     public DelegatePathFinderNode onChangeCurrentNode;
     public DelegatePathFinderNode onAddToOpenList;
-    public DelegatePathFinderNode onAddToCloasedList;
+    public DelegatePathFinderNode onAddToClosedList;
     public DelegatePathFinderNode onDestinationFound;
 
     public delegate void DelegateNoArguments();
@@ -182,7 +182,7 @@ namespace PathFinding
     public PathFinderStatus Step()
     {
       closedList.Add(CurrentNode);
-      onAddToCloasedList?.Invoke(CurrentNode);
+      onAddToClosedList?.Invoke(CurrentNode);
 
       if(openList.Count == 0)
       {
