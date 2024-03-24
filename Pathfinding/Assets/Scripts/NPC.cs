@@ -111,7 +111,7 @@ public class NPC : MonoBehaviour
       pathFinder.Step();
       // We purposely make it slower so that we can
       // visualise the search.
-      yield return new WaitForSeconds(0.1f);
+      yield return new WaitForSeconds(1f);
     }
   }
 

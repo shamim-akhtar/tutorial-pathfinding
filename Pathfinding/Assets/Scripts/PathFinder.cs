@@ -279,7 +279,7 @@ namespace PathFinding
         {
           PathFinderNode n = new PathFinderNode(cell, CurrentNode, G, H);
           openList.Add(n);
-          onAddToOpenList?.Invoke(CurrentNode);
+          onAddToOpenList?.Invoke(n);
         }
         else
         {
@@ -313,7 +313,7 @@ namespace PathFinding
         {
           PathFinderNode n = new PathFinderNode(cell, CurrentNode, G, H);
           openList.Add(n);
-          onAddToOpenList?.Invoke(CurrentNode);
+          onAddToOpenList?.Invoke(n);
         }
         else
         {
@@ -348,7 +348,7 @@ namespace PathFinding
         {
           PathFinderNode n = new PathFinderNode(cell, CurrentNode, G, H);
           openList.Add(n);
-          onAddToOpenList?.Invoke(CurrentNode);
+          onAddToOpenList?.Invoke(n);
         }
         else
         {
