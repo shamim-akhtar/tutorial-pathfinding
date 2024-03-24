@@ -279,7 +279,7 @@ namespace PathFinding
         {
           PathFinderNode n = new PathFinderNode(cell, CurrentNode, G, H);
           openList.Add(n);
-          onAddToOpenList?.Invoke(CurrentNode);
+          onAddToOpenList?.Invoke(n);
         }
         else
         {
@@ -288,7 +288,7 @@ namespace PathFinding
           {
             openList[idOList].Parent = CurrentNode;
             openList[idOList].SetGCost(G);
-            onAddToOpenList?.Invoke(CurrentNode);
+            onAddToOpenList?.Invoke(openList[idOList]);
           }
         }
       }
@@ -313,7 +313,7 @@ namespace PathFinding
         {
           PathFinderNode n = new PathFinderNode(cell, CurrentNode, G, H);
           openList.Add(n);
-          onAddToOpenList?.Invoke(CurrentNode);
+          onAddToOpenList?.Invoke(n);
         }
         else
         {
@@ -322,7 +322,7 @@ namespace PathFinding
           {
             openList[idOList].Parent = CurrentNode;
             openList[idOList].SetGCost(G);
-            onAddToOpenList?.Invoke(CurrentNode);
+            onAddToOpenList?.Invoke(openList[idOList]);
           }
         }
       }
@@ -348,7 +348,7 @@ namespace PathFinding
         {
           PathFinderNode n = new PathFinderNode(cell, CurrentNode, G, H);
           openList.Add(n);
-          onAddToOpenList?.Invoke(CurrentNode);
+          onAddToOpenList?.Invoke(n);
         }
         else
         {
@@ -357,7 +357,7 @@ namespace PathFinding
           {
             openList[idOList].Parent = CurrentNode;
             openList[idOList].SetGCost(G);
-            onAddToOpenList?.Invoke(CurrentNode);
+            onAddToOpenList?.Invoke(openList[idOList]);
           }
         }
       }
