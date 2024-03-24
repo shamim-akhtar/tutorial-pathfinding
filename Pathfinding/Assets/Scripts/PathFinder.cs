@@ -244,6 +244,7 @@ namespace PathFinding
       PathFinderNode root = new PathFinderNode(Start, null, 0.0f, H);
 
       openList.Add(root);
+      onAddToOpenList?.Invoke(root); 
 
       CurrentNode = root;
 
