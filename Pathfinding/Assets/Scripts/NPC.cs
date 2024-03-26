@@ -8,7 +8,16 @@ public class NPC : MonoBehaviour
   public float speed = 2.0f;
   public Queue<Vector2> wayPoints = new Queue<Vector2>();
 
-  PathFinder<Vector2Int> pathFinder = new AStarPathFinder<Vector2Int>();
+  public enum PathFinderType
+  {
+    ASTAR,
+    DIJKSTRA,
+    GREEDY,
+  }
+  [SerializeField] 
+  PathFinderType pathFinderType = PathFinderType.ASTAR;
+
+  PathFinder<Vector2Int> pathFinder = null;// = new AStarPathFinder<Vector2Int>();
 
   public GridMap Map { get; set; }
 
@@ -117,6 +126,19 @@ public class NPC : MonoBehaviour
 
   private void Start()
   {
+    switch (pathFinderType)
+    {
+      case PathFinderType.ASTAR:
+        pathFinder = new AStarPathFinder<Vector2Int>();
+        break;
+      case PathFinderType.DIJKSTRA:
+        pathFinder = new DijkstraPathFinder<Vector2Int>();
+        break;
+      case PathFinderType.GREEDY:
+        pathFinder = new GreedyPathFinder<Vector2Int>();
+        break;
+    }
+
     pathFinder.onSuccess = OnSuccessPathFinding;
     pathFinder.onFailure = OnFailurePathFinding;
     pathFinder.HeuristicCost = GridMap.GetManhattanCost;
