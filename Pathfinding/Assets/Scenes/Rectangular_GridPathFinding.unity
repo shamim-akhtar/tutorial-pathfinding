@@ -287,6 +287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+  pathFinderType: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,8 +493,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42bfb8854d690bf4fa7ccf911313d0ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numX: 16
-  numY: 9
+  numX: 6
+  numY: 6
   gridNodeViewPrefab: {fileID: 5382759684804752574, guid: bfa28317eb98f2846969e3ffce05f685, type: 3}
   allowDiagonalMovement: 1
   COLOR_WALKABLE: {r: 0.4, g: 0.4, b: 0.8, a: 1}
@@ -501,6 +502,7 @@ MonoBehaviour:
   COLOR_CURRENT_NODE: {r: 0, g: 1, b: 1, a: 1}
   COLOR_ADD_TO_OPENLIST: {r: 0, g: 1, b: 0, a: 1}
   COLOR_ADD_TO_CLOSEDLIST: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  COLOR_PATH: {r: 0, g: 0, b: 1, a: 1}
   npc: {fileID: 497641072}
   destination: {fileID: 389083262}
 --- !u!4 &1193653633
